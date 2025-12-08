@@ -1,6 +1,11 @@
 import { SectionCards } from "@/components/section-cards";
+import { currentUser } from "@clerk/nextjs/server";
 
-export default function Page() {
+export default async function Page() {
+  const user = await currentUser();
+
+  console.log(user);
+
   return (
     <div className="flex flex-1 flex-col">
       <div className="@container/main flex flex-1 flex-col gap-2">
