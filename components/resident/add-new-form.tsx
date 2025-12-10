@@ -11,6 +11,7 @@ import { Textarea } from "@/components/ui/textarea";
 import Link from "next/link";
 
 import { postResident } from "@/lib/actions/resident.action";
+import { useRouter } from "next/navigation";
 
 const formSchema = z.object({
   name: z.string().min(1).max(50),
@@ -18,6 +19,8 @@ const formSchema = z.object({
 });
 
 export const AddNewForm = () => {
+  const router = useRouter();
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -28,8 +31,13 @@ export const AddNewForm = () => {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      await postResident(values);
-    } catch (error: any) {
+      const response = await postResident(values);
+      if (!response.success) {
+        throw new Error(response.message);
+      }
+
+      router.replace("/dashboard/residents");
+    } catch (error) {
       console.log(error);
     }
   };
