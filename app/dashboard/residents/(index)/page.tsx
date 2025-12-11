@@ -9,6 +9,12 @@ import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyTitle } from "
 import Link from "next/link";
 import { getAllResidents } from "@/lib/actions/resident.action";
 
+type ResidentProps = {
+  id: string;
+  name: string;
+  description: string;
+};
+
 export default async function Resident() {
   const { data } = await getAllResidents();
 
@@ -34,8 +40,8 @@ export default async function Resident() {
       </div>
       <div className="flex gap-5">
         {data.length > 0 ? (
-          data.map((group) => (
-            <Link key={group.id} href={`/dashboard/residents/${group.id}`} className="w-full max-w-md group hover:cursor-pointer">
+          data.map((resident: ResidentProps) => (
+            <Link key={resident.id} href={`/dashboard/residents/${resident.id}`} className="w-full max-w-md group hover:cursor-pointer">
               <Card>
                 <CardHeader>
                   <div className="flex gap-4">
@@ -44,8 +50,8 @@ export default async function Resident() {
                       <AvatarFallback>ER</AvatarFallback>
                     </Avatar>
                     <div className="flex flex-col space-y-1">
-                      <CardTitle className="group-hover:text-gray-500">{group.name}</CardTitle>
-                      <CardDescription className="text-gray-400 font-bold group-hover:text-gray-300">{group.description}</CardDescription>
+                      <CardTitle className="group-hover:text-gray-500">{resident.name}</CardTitle>
+                      <CardDescription className="text-gray-400 font-bold group-hover:text-gray-300">{resident.description}</CardDescription>
                     </div>
                   </div>
                 </CardHeader>

@@ -9,6 +9,12 @@ import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyTitle } from "
 import Link from "next/link";
 import { getAllHouses } from "@/lib/actions/house.action";
 
+type HouseProps = {
+  id: string;
+  number: string;
+  address: string;
+};
+
 export default async function ResidentDetail({ params }: { params: { id: string } }) {
   const { id } = await params;
   const { data } = await getAllHouses(id);
@@ -20,7 +26,7 @@ export default async function ResidentDetail({ params }: { params: { id: string 
       <div className="w-full flex justify-between">
         <div className="w-1/3">
           <InputGroup>
-            <InputGroupInput placeholder="Search for home..." />
+            <InputGroupInput placeholder="Search for house..." />
             <InputGroupAddon>
               <IconSearch />
             </InputGroupAddon>
@@ -35,7 +41,7 @@ export default async function ResidentDetail({ params }: { params: { id: string 
       </div>
       <div className="flex gap-5">
         {data.length > 0 ? (
-          data.map((house) => (
+          data.map((house: HouseProps) => (
             <Link key={house.id} href={`/houses/${house.id}`} className="w-full max-w-md group hover:cursor-pointer">
               <Card className="h-40">
                 <CardHeader>

@@ -75,7 +75,7 @@ export const AddNewForm = (prop: { idResident: string }) => {
           )}
         />
         <div className="flex justify-between">
-          <Link href="/dashboard/residents">
+          <Link href={`/dashboard/residents/${prop.idResident}`}>
             <Button variant={"secondary"}>Cancel</Button>
           </Link>
           <Button type="submit">Submit</Button>
