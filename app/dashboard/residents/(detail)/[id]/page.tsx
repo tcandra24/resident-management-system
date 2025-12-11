@@ -1,0 +1,75 @@
+import { IconPlus, IconSearch } from "@tabler/icons-react";
+
+import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { InputGroup, InputGroupAddon, InputGroupInput } from "@/components/ui/input-group";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyTitle } from "@/components/ui/empty";
+
+import Link from "next/link";
+import { getAllHouses } from "@/lib/actions/house.action";
+
+export default async function ResidentDetail({ params }: { params: { id: string } }) {
+  const { id } = await params;
+  const { data } = await getAllHouses(id);
+
+  return (
+    <>
+      <h1 className="text-2xl my-4 font-bold">Your Houses</h1>
+      {/* Search Panel */}
+      <div className="w-full flex justify-between">
+        <div className="w-1/3">
+          <InputGroup>
+            <InputGroupInput placeholder="Search for home..." />
+            <InputGroupAddon>
+              <IconSearch />
+            </InputGroupAddon>
+          </InputGroup>
+        </div>
+        <Link href={`/houses/new/${id}`}>
+          <Button>
+            <IconPlus />
+            Add House
+          </Button>
+        </Link>
+      </div>
+      <div className="flex gap-5">
+        {data.length > 0 ? (
+          data.map((house) => (
+            <Link key={house.id} href={`/houses/${house.id}`} className="w-full max-w-md group hover:cursor-pointer">
+              <Card className="h-40">
+                <CardHeader>
+                  <div className="flex gap-4">
+                    <Avatar>
+                      <AvatarImage src="https://github.com/evilrabbit.png" alt="@evilrabbit" />
+                      <AvatarFallback>ER</AvatarFallback>
+                    </Avatar>
+                    <div className="flex flex-col space-y-1">
+                      <CardTitle className="group-hover:text-gray-500">{house.number}</CardTitle>
+                      <CardDescription className="text-gray-400 font-bold group-hover:text-gray-300">{house.address}</CardDescription>
+                    </div>
+                  </div>
+                </CardHeader>
+              </Card>
+            </Link>
+          ))
+        ) : (
+          <Empty className="border border-double w-full">
+            <EmptyHeader>
+              <EmptyTitle className="font-bold">House is Empty</EmptyTitle>
+              <EmptyDescription>You can add house to add family</EmptyDescription>
+            </EmptyHeader>
+            <EmptyContent>
+              <Link href={`/houses/new/${id}`}>
+                <Button variant="outline" size="sm">
+                  <IconPlus />
+                  Add House
+                </Button>
+              </Link>
+            </EmptyContent>
+          </Empty>
+        )}
+      </div>
+    </>
+  );
+}

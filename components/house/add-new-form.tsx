@@ -11,33 +11,33 @@ import { Textarea } from "@/components/ui/textarea";
 
 import Link from "next/link";
 
-import { postResident } from "@/lib/actions/resident.action";
+import { postHouse } from "@/lib/actions/house.action";
 import { useRouter } from "next/navigation";
 
 const formSchema = z.object({
-  name: z.string().min(1).max(50),
-  description: z.string().min(1).max(500),
+  number: z.string().min(1).max(10),
+  address: z.string().min(1).max(500),
 });
 
-export const AddNewForm = () => {
+export const AddNewForm = (prop: { idResident: string }) => {
   const router = useRouter();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: "",
-      description: "",
+      number: "",
+      address: "",
     },
   });
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      const response = await postResident(values);
+      const response = await postHouse(prop.idResident, values);
       if (!response.success) {
         throw new Error(response.message);
       }
 
-      router.replace(`/dashboard/residents/${response?.data?.id}`);
+      router.replace(`/dashboard/residents/${response.data?.resident_id}`);
     } catch (error) {
       console.log(error);
     }
@@ -48,28 +48,28 @@ export const AddNewForm = () => {
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
         <FormField
           control={form.control}
-          name="name"
+          name="number"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="font-bold">Name</FormLabel>
+              <FormLabel className="font-bold">Number</FormLabel>
               <FormControl>
-                <Input placeholder="name of your resident" {...field} />
+                <Input placeholder="number of your house" {...field} />
               </FormControl>
-              <FormDescription>This is your resident name.</FormDescription>
+              <FormDescription>This is your house number.</FormDescription>
               <FormMessage />
             </FormItem>
           )}
         />
         <FormField
           control={form.control}
-          name="description"
+          name="address"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="font-bold">Description</FormLabel>
+              <FormLabel className="font-bold">Address</FormLabel>
               <FormControl>
-                <Textarea placeholder="Description of your resident" {...field}></Textarea>
+                <Textarea placeholder="Address of your home" {...field}></Textarea>
               </FormControl>
-              <FormDescription>This is your description of resident.</FormDescription>
+              <FormDescription>This is your house address.</FormDescription>
               <FormMessage />
             </FormItem>
           )}

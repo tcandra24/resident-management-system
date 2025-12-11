@@ -18,8 +18,57 @@ model Resident {
   name        String
   description String
   user_id     String
+  houses      House[]
   created_at  DateTime @default(now())
   updated_at  DateTime @updatedAt
 
   @@map("residents")
+}
+
+model User {
+  id         String   @id @default(uuid())
+  name       String
+  email      String
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  @@map("users")
+}
+
+model House {
+  id          String   @id @default(uuid())
+  address     String
+  number      String
+  resident_id String
+  resident    Resident @relation(fields: [resident_id], references: [id])
+  families    Family[]
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+
+  @@map("houses")
+}
+
+model Family {
+  id         String   @id @default(uuid())
+  identifier String
+  house_id   String
+  house      House    @relation(fields: [house_id], references: [id])
+  members    Member[]
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  @@map("families")
+}
+
+model Member {
+  id         String   @id @default(uuid())
+  name       String
+  birth_date DateTime
+  job        String?
+  family_id  String
+  family     Family   @relation(fields: [family_id], references: [id])
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  @@map("members")
 }

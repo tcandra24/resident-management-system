@@ -1,4 +1,5 @@
 "use server";
+
 import { auth } from "@clerk/nextjs/server";
 import prisma from "../prisma";
 
@@ -37,7 +38,7 @@ export const postResident = async (formData: CreateResident) => {
     const { userId: user } = await auth();
     const { name, description } = formData;
 
-    await prisma.resident.create({
+    const data = await prisma.resident.create({
       data: {
         name,
         description,
@@ -48,12 +49,14 @@ export const postResident = async (formData: CreateResident) => {
     return {
       success: true,
       message: "Resident inserted successfully",
+      data,
     };
   } catch (error) {
     return {
       success: false,
       message: "Failed to insert resident",
       error,
+      data: null,
     };
   }
 };
