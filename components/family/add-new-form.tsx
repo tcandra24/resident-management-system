@@ -1,76 +1,79 @@
 "use client";
 
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
+import { forwardRef, useImperativeHandle } from "react";
+import { useParams } from "next/navigation";
+
 const formSchema = z.object({
-  number: z.string().min(1).max(10),
-  address: z.string().min(1).max(500),
+  identifier: z.string().min(1).max(25),
 });
 
-export const AddNewForm = () => {
+export const AddNewForm = forwardRef((props, ref) => {
+  const params = useParams();
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      identifier: "",
+    },
+  });
+
+  const onSubmit = async (value: z.infer<typeof formSchema>) => {
+    const response = await fetch(`/api/family/${params.id}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        identifier: value.identifier,
+      }),
+    });
+
+    const data = await response.json();
+
+    if (!data.success) {
+      console.log("Error : " + data.message);
+      return;
+    }
+
+    console.log("Response : " + data);
+  };
+
+  useImperativeHandle(ref, () => ({
+    submit: () => form.handleSubmit(onSubmit)(),
+  }));
+
   return (
     <div className="grid flex-1 auto-rows-min gap-6 px-4">
-      <div className="grid gap-3">
-        <Label htmlFor="sheet-demo-name">Name</Label>
-        <Input id="sheet-demo-name" defaultValue="Pedro Duarte" />
-      </div>
-      <div className="grid gap-3">
-        <Label htmlFor="sheet-demo-username">Username</Label>
-        <Input id="sheet-demo-username" defaultValue="@peduarte" />
-      </div>
-      <div className="grid gap-3">
-        <Label htmlFor="sheet-demo-username">Username</Label>
-        <Input id="sheet-demo-username" defaultValue="@peduarte" />
-      </div>
-      <div className="grid gap-3">
-        <Label htmlFor="sheet-demo-username">Username</Label>
-        <Input id="sheet-demo-username" defaultValue="@peduarte" />
-      </div>
-      <div className="grid gap-3">
-        <Label htmlFor="sheet-demo-username">Username</Label>
-        <Input id="sheet-demo-username" defaultValue="@peduarte" />
-      </div>
-      <div className="grid gap-3">
-        <Label htmlFor="sheet-demo-username">Username</Label>
-        <Input id="sheet-demo-username" defaultValue="@peduarte" />
-      </div>
-      <div className="grid gap-3">
-        <Label htmlFor="sheet-demo-username">Username</Label>
-        <Input id="sheet-demo-username" defaultValue="@peduarte" />
-      </div>
-      <div className="grid gap-3">
-        <Label htmlFor="sheet-demo-username">Username</Label>
-        <Input id="sheet-demo-username" defaultValue="@peduarte" />
-      </div>
-      <div className="grid gap-3">
-        <Label htmlFor="sheet-demo-username">Username</Label>
-        <Input id="sheet-demo-username" defaultValue="@peduarte" />
-      </div>
-      <div className="grid gap-3">
-        <Label htmlFor="sheet-demo-username">Username</Label>
-        <Input id="sheet-demo-username" defaultValue="@peduarte" />
-      </div>
-      <div className="grid gap-3">
-        <Label htmlFor="sheet-demo-username">Username</Label>
-        <Input id="sheet-demo-username" defaultValue="@peduarte" />
-      </div>
-      <div className="grid gap-3">
-        <Label htmlFor="sheet-demo-username">Username</Label>
-        <Input id="sheet-demo-username" defaultValue="@peduarte" />
-      </div>
-      <div className="grid gap-3">
-        <Label htmlFor="sheet-demo-username">Username</Label>
-        <Input id="sheet-demo-username" defaultValue="@peduarte" />
-      </div>
-      <div className="grid gap-3">
-        <Label htmlFor="sheet-demo-username">Username</Label>
-        <Input id="sheet-demo-username" defaultValue="@peduarte" />
-      </div>
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+          <FormField
+            control={form.control}
+            name="identifier"
+            render={({ field }) => (
+              <FormItem>
+                <div className="grid gap-3">
+                  <FormLabel htmlFor="identifier" className="font-bold">
+                    Identifier
+                  </FormLabel>
+                  <FormControl>
+                    <Input placeholder="identifier of your family" {...field} />
+                  </FormControl>
+                </div>
+                <FormDescription>This is your family identifier (KK).</FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </form>
+      </Form>
     </div>
   );
-};
+});
+
+AddNewForm.displayName = "AddNewForm";

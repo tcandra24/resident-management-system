@@ -7,35 +7,54 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { NavMain } from "@/components/family/nav-main";
 import { Button } from "@/components/ui/button";
 
-import { useState } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import { AddNewForm } from "@/components/family/add-new-form";
+import { useParams } from "next/navigation";
 
-const sidebarData = [
-  {
-    title: "Playground",
-    url: "#",
-  },
-  {
-    title: "Models",
-    url: "#",
-  },
-  {
-    title: "Documentation",
-    url: "#",
-  },
-  {
-    title: "Settings",
-    url: "#",
-  },
-];
+type AppSideBarFamilyProps = {
+  title: string;
+  url: string;
+};
 
 export function AppSidebar() {
   const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [families, setFamilies] = useState<AppSideBarFamilyProps[]>([]);
+  const formRef = useRef<{ submit: () => void }>(null);
+
+  const params = useParams();
 
   const handleOpenSheet = () => {
-    // console.log("Open Sheet");
     setIsOpen(true);
   };
+
+  const onSubmit = () => {
+    formRef.current?.submit();
+  };
+
+  useEffect(() => {
+    if (!params?.id) return;
+
+    const fetchFamilies = async () => {
+      const response = await fetch(`/api/family/${params.id}`);
+
+      const data = await response.json();
+      if (!data.success) {
+        console.log("Error : " + data.message);
+        return;
+      }
+
+      const mappingData = data.data.map((family: { identifier: string; id: string }) => {
+        return {
+          title: family.identifier,
+          url: `/family/${family.id}`,
+        };
+      });
+
+      setFamilies(mappingData);
+    };
+
+    fetchFamilies();
+  }, [params?.id]);
 
   return (
     <Sidebar collapsible="none">
@@ -47,7 +66,7 @@ export function AppSidebar() {
           <IconPlus />
           Add Family
         </Button>
-        <NavMain items={sidebarData} />
+        <NavMain items={families} />
       </SidebarContent>
       <SidebarRail />
       <Sheet open={isOpen} onOpenChange={setIsOpen}>
@@ -56,14 +75,19 @@ export function AppSidebar() {
             <SheetTitle>Add family</SheetTitle>
             <SheetDescription>Make changes to your profile here. Click save when you&apos;re done.</SheetDescription>
           </SheetHeader>
-          <ScrollArea className="h-[600px]">
-            <AddNewForm />
+          <ScrollArea className="h-[400px]">
+            <AddNewForm ref={formRef} />
           </ScrollArea>
           <SheetFooter>
-            <Button type="submit">Save changes</Button>
-            <SheetClose asChild>
-              <Button variant="outline">Close</Button>
-            </SheetClose>
+            <div className="flex justify-between">
+              <SheetClose asChild>
+                <Button variant="outline">Close</Button>
+              </SheetClose>
+
+              <Button className="cursor-pointer" type="button" onClick={() => onSubmit()}>
+                Save changes
+              </Button>
+            </div>
           </SheetFooter>
         </SheetContent>
       </Sheet>
