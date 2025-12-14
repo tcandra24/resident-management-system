@@ -46,7 +46,7 @@ export function AppSidebar() {
       const mappingData = data.data.map((family: { identifier: string; id: string }) => {
         return {
           title: family.identifier,
-          url: `/family/${family.id}`,
+          url: `/houses/${params?.id}/editor/${family.id}`,
         };
       });
 

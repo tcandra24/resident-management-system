@@ -1,11 +1,11 @@
 import { AppSidebar } from "@/components/family/app-sidebar";
 import { Separator } from "@/components/ui/separator";
-import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 
 export default function Layout({
-  children,
+  family,
 }: Readonly<{
-  children: React.ReactNode;
+  family: React.ReactNode;
 }>) {
   return (
     <SidebarProvider>
@@ -20,7 +20,7 @@ export default function Layout({
             <p className="font-semibold">Header 2</p>
           </div>
         </header>
-        <div className="flex flex-1 flex-col gap-4 pt-0">{children}</div>
+        <div className="flex flex-1 flex-col gap-4 pt-0">{family}</div>
       </SidebarInset>
     </SidebarProvider>
   );
