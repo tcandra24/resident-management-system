@@ -1,8 +1,9 @@
 "use client";
-import { IconPlus } from "@tabler/icons-react";
+import { IconPlus, IconSearch } from "@tabler/icons-react";
 
 import { Sheet, SheetClose, SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { Sidebar, SidebarContent, SidebarHeader, SidebarRail } from "@/components/ui/sidebar";
+import { InputGroup, InputGroupAddon, InputGroupInput } from "@/components/ui/input-group";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { NavMain } from "@/components/family/nav-main";
 import { Button } from "@/components/ui/button";
@@ -62,10 +63,16 @@ export function AppSidebar() {
         <h2 className="font-bold">Family Editor</h2>
       </SidebarHeader>
       <SidebarContent>
-        <Button className="mx-5 my-2 cursor-pointer" onClick={() => handleOpenSheet()}>
+        <Button className="mx-5 my-1 cursor-pointer" onClick={() => handleOpenSheet()}>
           <IconPlus />
           Add Family
         </Button>
+        <InputGroup className="mx-5 my-1 w-fit">
+          <InputGroupInput placeholder="Search for family..." />
+          <InputGroupAddon>
+            <IconSearch />
+          </InputGroupAddon>
+        </InputGroup>
         <NavMain items={families} />
       </SidebarContent>
       <SidebarRail />
