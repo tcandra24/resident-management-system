@@ -42,7 +42,7 @@ export default async function ResidentDetail({ params }: { params: { id: string 
       <div className="flex gap-5">
         {data.length > 0 ? (
           data.map((house: HouseProps) => (
-            <Link key={house.id} href={`/houses/${house.id}`} className="w-full max-w-md group hover:cursor-pointer">
+            <Link key={house.id} href={`/houses/${house.id}/editor`} className="w-full max-w-md group hover:cursor-pointer">
               <Card className="h-40">
                 <CardHeader>
                   <div className="flex gap-4">
