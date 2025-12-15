@@ -1,47 +1,28 @@
-import { DataTable } from "@/components/member/data-table";
+import { DataTable, type Member } from "@/components/member/data-table";
 // import { getMembersByFamilyId } from "@/lib/actions/member.action";
 
 // import data from "../../../../../data.json";
 
 // type MemberProps = { id: string; name: string; birth_date: Date; job: string };
 
-export type Payment = {
-  id: string;
-  amount: number;
-  status: "pending" | "processing" | "success" | "failed";
-  email: string;
-};
-
-const data: Payment[] = [
+const data: Member[] = [
   {
     id: "m5gr84i9",
-    amount: 316,
-    status: "success",
-    email: "ken99@example.com",
+    name: "John Doe",
+    birth_date: "1990-01-01",
+    job: "Software Engineer",
   },
   {
     id: "3u1reuv4",
-    amount: 242,
-    status: "success",
-    email: "Abe45@example.com",
+    name: "Jane Smith",
+    birth_date: "1985-05-15",
+    job: "Data Analyst",
   },
   {
     id: "derv1ws0",
-    amount: 837,
-    status: "processing",
-    email: "Monserrat44@example.com",
-  },
-  {
-    id: "5kma53ae",
-    amount: 874,
-    status: "success",
-    email: "Silas22@example.com",
-  },
-  {
-    id: "bhqecj4p",
-    amount: 721,
-    status: "failed",
-    email: "carmella@example.com",
+    name: "Tito Smith",
+    birth_date: "1985-05-15",
+    job: "Data Science",
   },
 ];
 
