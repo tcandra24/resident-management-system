@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button";
 
 import { useState, useRef, useEffect, useEffectEvent } from "react";
 import { AddNewForm } from "@/components/family/add-new-form";
-import { redirect, useParams } from "next/navigation";
+import { useRouter, useParams } from "next/navigation";
 
 type AppSideBarFamilyProps = {
   title: string;
@@ -23,18 +23,17 @@ export function AppSidebar() {
   const formRef = useRef<{ submit: () => void }>(null);
 
   const params = useParams();
+  const router = useRouter();
 
   const handleOpenSheet = () => {
     setIsOpen(true);
   };
 
-  const handleCloseSheet = useEffectEvent(() => {
+  const fetchFamilies = useEffectEvent(async () => {
     if (isOpen) {
       setIsOpen(false);
     }
-  });
 
-  const fetchFamilies = useEffectEvent(async () => {
     const response = await fetch(`/api/family/${params.id}`);
 
     const data = await response.json();
@@ -54,7 +53,7 @@ export function AppSidebar() {
   });
 
   const handleFormSuccess = (redirectUrl: string) => {
-    redirect(redirectUrl);
+    router.replace(redirectUrl);
   };
 
   const onSubmit = () => {
@@ -63,8 +62,6 @@ export function AppSidebar() {
 
   useEffect(() => {
     if (!params?.id) return;
-
-    handleCloseSheet();
     fetchFamilies();
   }, [params?.id, params?.family_id]);
 
