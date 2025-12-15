@@ -8,9 +8,9 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { NavMain } from "@/components/family/nav-main";
 import { Button } from "@/components/ui/button";
 
-import { useState, useRef, useEffect, useCallback } from "react";
+import { useState, useRef, useEffect, useEffectEvent } from "react";
 import { AddNewForm } from "@/components/family/add-new-form";
-import { useParams } from "next/navigation";
+import { redirect, useParams } from "next/navigation";
 
 type AppSideBarFamilyProps = {
   title: string;
@@ -28,6 +28,35 @@ export function AppSidebar() {
     setIsOpen(true);
   };
 
+  const handleCloseSheet = useEffectEvent(() => {
+    if (isOpen) {
+      setIsOpen(false);
+    }
+  });
+
+  const fetchFamilies = useEffectEvent(async () => {
+    const response = await fetch(`/api/family/${params.id}`);
+
+    const data = await response.json();
+    if (!data.success) {
+      console.log("Error : " + data.message);
+      return;
+    }
+
+    const mappingData = data.data.map((family: { identifier: string; id: string }) => {
+      return {
+        title: family.identifier,
+        url: `/houses/${params?.id}/editor/${family.id}`,
+      };
+    });
+
+    setFamilies(mappingData);
+  });
+
+  const handleFormSuccess = (redirectUrl: string) => {
+    redirect(redirectUrl);
+  };
+
   const onSubmit = () => {
     formRef.current?.submit();
   };
@@ -35,27 +64,9 @@ export function AppSidebar() {
   useEffect(() => {
     if (!params?.id) return;
 
-    const fetchFamilies = async () => {
-      const response = await fetch(`/api/family/${params.id}`);
-
-      const data = await response.json();
-      if (!data.success) {
-        console.log("Error : " + data.message);
-        return;
-      }
-
-      const mappingData = data.data.map((family: { identifier: string; id: string }) => {
-        return {
-          title: family.identifier,
-          url: `/houses/${params?.id}/editor/${family.id}`,
-        };
-      });
-
-      setFamilies(mappingData);
-    };
-
+    handleCloseSheet();
     fetchFamilies();
-  }, [params?.id]);
+  }, [params?.id, params?.family_id]);
 
   return (
     <Sidebar collapsible="none">
@@ -83,7 +94,7 @@ export function AppSidebar() {
             <SheetDescription>Make changes to your profile here. Click save when you&apos;re done.</SheetDescription>
           </SheetHeader>
           <ScrollArea className="h-[400px]">
-            <AddNewForm ref={formRef} />
+            <AddNewForm ref={formRef} onSuccess={handleFormSuccess} />
           </ScrollArea>
           <SheetFooter>
             <div className="flex justify-between">

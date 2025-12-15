@@ -10,11 +10,15 @@ import { z } from "zod";
 import { forwardRef, useImperativeHandle } from "react";
 import { useParams } from "next/navigation";
 
+type AddNewFormProps = {
+  onSuccess?: (redirectUrl: string) => void;
+};
+
 const formSchema = z.object({
   identifier: z.string().min(1).max(25),
 });
 
-export const AddNewForm = forwardRef((props, ref) => {
+export const AddNewForm = forwardRef<{ submit: () => void }, AddNewFormProps>(({ onSuccess }, ref) => {
   const params = useParams();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -41,7 +45,7 @@ export const AddNewForm = forwardRef((props, ref) => {
       return;
     }
 
-    console.log("Response : " + data);
+    onSuccess?.(`/houses/${params.id}/editor/${data.data.id}`);
   };
 
   useImperativeHandle(ref, () => ({
