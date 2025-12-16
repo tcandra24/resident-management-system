@@ -107,7 +107,7 @@ export function LoginForm({ className, ...props }: React.ComponentProps<"div">) 
             </Clerk.Loading>
           </SignIn.Root>
           <div className="bg-muted relative hidden md:block">
-            <Image src="/placeholder.svg" width={16} height={16} alt="Image" className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale" />
+            <Image src="/banner.png" width={450} height={530} alt="Image" className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale" />
           </div>
         </CardContent>
       </Card>
