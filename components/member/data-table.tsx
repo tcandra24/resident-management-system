@@ -3,7 +3,7 @@
 import * as React from "react";
 import { ColumnDef, ColumnFiltersState, SortingState, VisibilityState, flexRender, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, useReactTable } from "@tanstack/react-table";
 
-import { ArrowUpDown, MoreHorizontal } from "lucide-react";
+import { ArrowUpDown, IdCard, MoreHorizontal } from "lucide-react";
 import { IconPlus } from "@tabler/icons-react";
 
 import { Button } from "@/components/ui/button";
@@ -28,7 +28,7 @@ declare module "@tanstack/react-table" {
 export type Member = {
   id: string;
   name: string;
-  birth_date: Date;
+  birth_date: string;
   job: string | null;
   family_id: string;
 };
@@ -65,7 +65,6 @@ const EditableDateCell = ({ getValue, row, column, table }: any) => {
   React.useEffect(() => {
     setValue(initialValue);
   }, [initialValue]);
-  console.log();
 
   return (
     <Input
@@ -148,8 +147,14 @@ export const DataTable = ({ data: initialData, familyId }: { data: Member[]; fam
     setData((old) => old.map((row, index) => (index === rowIndex ? { ...row, [columnId]: value } : row)));
   };
 
-  const deleteData = (id: string) => {
-    setData((old) => old.filter((element) => element.id !== id));
+  const deleteData = async (id: string) => {
+    const response = await fetch(`/api/member/${id}`, {
+      method: "DELETE",
+    });
+
+    const data = await response.json();
+
+    setData((old) => old.filter((element) => element.id !== data.data.id));
   };
 
   const table = useReactTable({
@@ -181,7 +186,7 @@ export const DataTable = ({ data: initialData, familyId }: { data: Member[]; fam
       {
         id: `new-${Math.random().toString(36).slice(2, 9)}`,
         name: "",
-        birth_date: new Date(),
+        birth_date: new Date().toISOString(),
         job: "",
         family_id: familyId,
       },
@@ -190,6 +195,7 @@ export const DataTable = ({ data: initialData, familyId }: { data: Member[]; fam
 
   const saveChanges = async () => {
     const selectedRows = table.getSelectedRowModel().rows.map((row) => row.original);
+
     const response = await fetch(`/api/member`, {
       method: "POST",
       body: JSON.stringify(selectedRows),

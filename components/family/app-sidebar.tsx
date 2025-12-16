@@ -13,6 +13,7 @@ import { AddNewForm } from "@/components/family/add-new-form";
 import { useRouter, useParams } from "next/navigation";
 
 type AppSideBarFamilyProps = {
+  id: string;
   title: string;
   url: string;
 };
@@ -44,6 +45,7 @@ export function AppSidebar() {
 
     const mappingData = data.data.map((family: { identifier: string; id: string }) => {
       return {
+        id: family.id,
         title: family.identifier,
         url: `/houses/${params?.id}/editor/${family.id}`,
       };
@@ -81,7 +83,7 @@ export function AppSidebar() {
             <IconSearch />
           </InputGroupAddon>
         </InputGroup>
-        <NavMain items={families} />
+        <NavMain items={families} activeFamilyId={(params?.family_id as string) ?? ""} />
       </SidebarContent>
       <SidebarRail />
       <Sheet open={isOpen} onOpenChange={setIsOpen}>

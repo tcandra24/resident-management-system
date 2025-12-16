@@ -25,10 +25,19 @@ export const getMembersByFamilyId = async (id: string) => {
       },
     });
 
+    const mappingData = data.map((member) => {
+      const birth_date = new Date(member.birth_date);
+
+      return {
+        ...member,
+        birth_date: `${birth_date.getFullYear()}-${birth_date.getMonth()}-${birth_date.getDate()}`,
+      };
+    });
+
     return {
       success: true,
       message: "Members fetched successfully",
-      data,
+      data: mappingData,
     };
   } catch (error) {
     return {
@@ -68,10 +77,32 @@ export const postMember = async (formData: CreateMember[]) => {
       data,
     };
   } catch (error) {
-    console.log(error);
     return {
       success: false,
       message: "Failed to insert member",
+      error,
+      data: null,
+    };
+  }
+};
+
+export const destroyMember = async (id: string) => {
+  try {
+    const data = await prisma.member.delete({
+      where: {
+        id,
+      },
+    });
+
+    return {
+      success: true,
+      message: "Members deleted successfully",
+      data,
+    };
+  } catch (error) {
+    return {
+      success: false,
+      message: "Failed to delete member",
       error,
       data: null,
     };
