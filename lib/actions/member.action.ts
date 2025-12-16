@@ -3,6 +3,7 @@
 import prisma from "@/lib/prisma";
 
 type CreateMember = {
+  id: string;
   name: string;
   birth_date: Date;
   job: string;
@@ -39,25 +40,35 @@ export const getMembersByFamilyId = async (id: string) => {
   }
 };
 
-export const postMember = async (formData: CreateMember) => {
+export const postMember = async (formData: CreateMember[]) => {
   try {
-    const { name, birth_date, job, family_id } = formData;
-
-    const data = await prisma.member.create({
-      data: {
-        name,
-        birth_date,
-        job,
-        family_id,
-      },
-    });
+    const queries = formData.map((item) =>
+      prisma.member.upsert({
+        where: {
+          id: item.id,
+        },
+        update: {
+          name: item.name,
+          birth_date: new Date(item.birth_date).toISOString(),
+          job: item.job,
+        },
+        create: {
+          name: item.name,
+          birth_date: new Date(item.birth_date).toISOString(),
+          job: item.job,
+          family_id: item.family_id,
+        },
+      })
+    );
+    const data = await prisma.$transaction(queries);
 
     return {
       success: true,
-      message: "Member inserted successfully",
+      message: "Members inserted successfully",
       data,
     };
   } catch (error) {
+    console.log(error);
     return {
       success: false,
       message: "Failed to insert member",

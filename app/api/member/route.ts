@@ -1,11 +1,11 @@
 import { NextResponse, NextRequest } from "next/server";
-import { getMembersByFamilyId } from "@/lib/actions/member.action";
+import { postMember } from "@/lib/actions/member.action";
 
-export const GET = async (request: NextRequest, { params }: { params: Promise<{ id: string }> }) => {
+export const POST = async (request: NextRequest) => {
   try {
-    const { id } = await params;
+    const body = await request.json();
 
-    const response = await getMembersByFamilyId(id);
+    const response = await postMember(body);
 
     if (!response.success) {
       throw new Error(response.message);
@@ -20,6 +20,7 @@ export const GET = async (request: NextRequest, { params }: { params: Promise<{ 
     return NextResponse.json({
       success: false,
       message: error instanceof Error ? error.message : "An unexpected error occurred",
+      error,
     });
   }
 };

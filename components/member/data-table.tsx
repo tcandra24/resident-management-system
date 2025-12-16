@@ -13,6 +13,14 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Separator } from "@/components/ui/separator";
 import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 
+declare module "@tanstack/react-table" {
+  interface TableMeta<TData> {
+    updateData: (rowIndex: number, columnId: string, value: unknown) => void;
+
+    deleteData: (id: string) => void;
+  }
+}
+
 /* =========================
    TYPE
 ========================= */
@@ -20,8 +28,9 @@ import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMe
 export type Member = {
   id: string;
   name: string;
-  birth_date: string;
-  job: string;
+  birth_date: Date;
+  job: string | null;
+  family_id: string;
 };
 
 /* =========================
@@ -36,7 +45,17 @@ const EditableInputCell = ({ getValue, row, column, table }: any) => {
     setValue(initialValue);
   }, [initialValue]);
 
-  return <Input value={value ?? ""} onChange={(e) => setValue(e.target.value)} onBlur={() => table.options.meta?.updateData(row.index, column.id, value)} className="border-0 shadow-none" />;
+  return (
+    <Input
+      value={value ?? ""}
+      onChange={(e) => {
+        setValue(e.target.value);
+        row.toggleSelected(true);
+      }}
+      onBlur={() => table.options.meta?.updateData(row.index, column.id, value)}
+      className="border-0 shadow-none"
+    />
+  );
 };
 
 const EditableDateCell = ({ getValue, row, column, table }: any) => {
@@ -46,22 +65,21 @@ const EditableDateCell = ({ getValue, row, column, table }: any) => {
   React.useEffect(() => {
     setValue(initialValue);
   }, [initialValue]);
+  console.log();
 
-  return <Input value={value ?? ""} type="date" onChange={(e) => setValue(e.target.value)} onBlur={() => table.options.meta?.updateData(row.index, column.id, value)} className="border-0 shadow-none" />;
+  return (
+    <Input
+      value={value ?? ""}
+      type="date"
+      onChange={(e) => {
+        setValue(e.target.value);
+        row.toggleSelected(true);
+      }}
+      onBlur={() => table.options.meta?.updateData(row.index, column.id, value)}
+      className="border-0 shadow-none"
+    />
+  );
 };
-
-// const EditableStatusCell = ({ getValue, row, column, table }: any) => {
-//   const value = getValue();
-
-//   return (
-//     <select value={value} onChange={(e) => table.options.meta?.updateData(row.index, column.id, e.target.value)} className="border rounded px-2 py-1 text-sm">
-//       <option value="pending">Pending</option>
-//       <option value="processing">Processing</option>
-//       <option value="success">Success</option>
-//       <option value="failed">Failed</option>
-//     </select>
-//   );
-// };
 
 /* =========================
    COLUMNS
@@ -90,7 +108,7 @@ export const columns: ColumnDef<Member>[] = [
     cell: EditableDateCell,
   },
   {
-    accessorKey: "Job",
+    accessorKey: "job",
     header: "Job",
     cell: EditableInputCell,
   },
@@ -107,7 +125,7 @@ export const columns: ColumnDef<Member>[] = [
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            <DropdownMenuItem onClick={() => table.options.meta?.deleteData(row.id)}>Delete</DropdownMenuItem>
+            <DropdownMenuItem onClick={() => table.options.meta?.deleteData(row.original.id)}>Delete</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       );
@@ -119,7 +137,7 @@ export const columns: ColumnDef<Member>[] = [
    DATATABLE
 ========================= */
 
-export const DataTable = ({ data: initialData }: { data: Member[] }) => {
+export const DataTable = ({ data: initialData, familyId }: { data: Member[]; familyId: string }) => {
   const [data, setData] = React.useState<Member[]>(initialData);
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
@@ -163,24 +181,23 @@ export const DataTable = ({ data: initialData }: { data: Member[] }) => {
       {
         id: `new-${Math.random().toString(36).slice(2, 9)}`,
         name: "",
-        birth_date: new Date().toISOString(),
+        birth_date: new Date(),
         job: "",
+        family_id: familyId,
       },
     ]);
   };
 
   const saveChanges = async () => {
     const selectedRows = table.getSelectedRowModel().rows.map((row) => row.original);
-
-    console.log("DATA DIKIRIM:", selectedRows);
-
-    // contoh API
-    /*
-    await fetch("/api/payments/update", {
+    const response = await fetch(`/api/member`, {
       method: "POST",
       body: JSON.stringify(selectedRows),
     });
-    */
+
+    const data = await response.json();
+
+    console.log(data);
   };
 
   return (

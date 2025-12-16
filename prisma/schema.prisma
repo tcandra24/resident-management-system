@@ -63,7 +63,7 @@ model Family {
 model Member {
   id         String   @id @default(uuid())
   name       String
-  birth_date DateTime
+  birth_date DateTime @db.Date
   job        String?
   family_id  String
   family     Family   @relation(fields: [family_id], references: [id])
