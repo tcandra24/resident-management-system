@@ -8,9 +8,6 @@ export default async function House({ params }: { params: { id: string; family_i
 
   return (
     <>
-      <p>
-        Family Page {id} - {family_id}
-      </p>
       <DataTable data={members} familyId={family_id} />
     </>
   );

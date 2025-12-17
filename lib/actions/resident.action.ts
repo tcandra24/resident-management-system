@@ -33,6 +33,32 @@ export const getAllResidents = async () => {
   }
 };
 
+export const getDetailResident = async (id: string) => {
+  try {
+    const { userId: user } = await auth();
+
+    const data = await prisma.resident.findFirst({
+      where: {
+        id: id,
+        user_id: user!,
+      },
+    });
+
+    return {
+      success: true,
+      message: "Resident fetched successfully",
+      data,
+    };
+  } catch (error) {
+    return {
+      success: false,
+      message: "Failed to fetch resident",
+      error,
+      data: null,
+    };
+  }
+};
+
 export const postResident = async (formData: CreateResident) => {
   try {
     const { userId: user } = await auth();

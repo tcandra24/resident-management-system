@@ -1,9 +1,9 @@
-import { IconPlus, IconSearch } from "@tabler/icons-react";
+import { IconPlus, IconSearch, IconBox } from "@tabler/icons-react";
 
 import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { InputGroup, InputGroupAddon, InputGroupInput } from "@/components/ui/input-group";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Avatar } from "@/components/ui/avatar";
 import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyTitle } from "@/components/ui/empty";
 
 import Link from "next/link";
@@ -32,7 +32,7 @@ export default async function Resident() {
           </InputGroup>
         </div>
         <Link href={"/dashboard/residents/new"}>
-          <Button>
+          <Button className="font-bold">
             <IconPlus />
             Add Residents
           </Button>
@@ -46,8 +46,7 @@ export default async function Resident() {
                 <CardHeader>
                   <div className="flex gap-4">
                     <Avatar>
-                      <AvatarImage src="https://github.com/evilrabbit.png" alt="@evilrabbit" />
-                      <AvatarFallback>ER</AvatarFallback>
+                      <IconBox />
                     </Avatar>
                     <div className="flex flex-col space-y-1">
                       <CardTitle className="group-hover:text-gray-500">{resident.name}</CardTitle>

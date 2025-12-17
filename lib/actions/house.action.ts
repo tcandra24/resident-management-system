@@ -30,6 +30,29 @@ export const getAllHouses = async (id: string) => {
   }
 };
 
+export const getDetailHouse = async (id: string) => {
+  try {
+    const data = await prisma.house.findFirst({
+      where: {
+        id: id,
+      },
+    });
+
+    return {
+      success: true,
+      message: "House fetched successfully",
+      data,
+    };
+  } catch (error) {
+    return {
+      success: false,
+      message: "Failed to fetch house",
+      error,
+      data: null,
+    };
+  }
+};
+
 export const postHouse = async (resident_id: string, formData: CreateHouse) => {
   try {
     const { number, address } = formData;

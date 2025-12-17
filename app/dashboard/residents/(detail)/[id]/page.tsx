@@ -1,9 +1,9 @@
-import { IconPlus, IconSearch } from "@tabler/icons-react";
+import { IconPlus, IconSearch, IconHome2 } from "@tabler/icons-react";
 
 import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { InputGroup, InputGroupAddon, InputGroupInput } from "@/components/ui/input-group";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Avatar } from "@/components/ui/avatar";
 import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyTitle } from "@/components/ui/empty";
 
 import Link from "next/link";
@@ -32,8 +32,8 @@ export default async function ResidentDetail({ params }: { params: { id: string 
             </InputGroupAddon>
           </InputGroup>
         </div>
-        <Link href={`/houses/new/${id}`}>
-          <Button>
+        <Link href={`/dashboard/houses/new/${id}`}>
+          <Button className="font-bold">
             <IconPlus />
             Add House
           </Button>
@@ -42,13 +42,12 @@ export default async function ResidentDetail({ params }: { params: { id: string 
       <div className="flex gap-5">
         {data.length > 0 ? (
           data.map((house: HouseProps) => (
-            <Link key={house.id} href={`/houses/${house.id}/editor`} className="w-full max-w-md group hover:cursor-pointer">
+            <Link key={house.id} href={`/dashboard/houses/${house.id}/editor`} className="w-full max-w-md group hover:cursor-pointer">
               <Card className="h-40">
                 <CardHeader>
                   <div className="flex gap-4">
                     <Avatar>
-                      <AvatarImage src="https://github.com/evilrabbit.png" alt="@evilrabbit" />
-                      <AvatarFallback>ER</AvatarFallback>
+                      <IconHome2 />
                     </Avatar>
                     <div className="flex flex-col space-y-1">
                       <CardTitle className="group-hover:text-gray-500">{house.number}</CardTitle>
@@ -66,7 +65,7 @@ export default async function ResidentDetail({ params }: { params: { id: string 
               <EmptyDescription>You can add house to add family</EmptyDescription>
             </EmptyHeader>
             <EmptyContent>
-              <Link href={`/houses/new/${id}`}>
+              <Link href={`/dashboard/houses/new/${id}`}>
                 <Button variant="outline" size="sm">
                   <IconPlus />
                   Add House

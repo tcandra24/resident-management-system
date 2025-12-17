@@ -45,7 +45,7 @@ export const AddNewForm = forwardRef<{ submit: () => void }, AddNewFormProps>(({
       return;
     }
 
-    onSuccess?.(`/houses/${params.id}/editor/${data.data.id}`);
+    onSuccess?.(`/dashboard/houses/${params.id}/editor/${data.data.id}`);
   };
 
   useImperativeHandle(ref, () => ({

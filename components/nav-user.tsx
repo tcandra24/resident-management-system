@@ -7,6 +7,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem,
 import { SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar } from "@/components/ui/sidebar";
 
 import { useClerk } from "@clerk/nextjs";
+import { fallbackAvatarName } from "@/lib/utils";
 
 export function NavUser({
   user,
@@ -28,13 +29,7 @@ export function NavUser({
             <SidebarMenuButton size="lg" className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground">
               <Avatar className="h-8 w-8 rounded-lg grayscale">
                 <AvatarImage src={user.avatar} alt={user.name} />
-                <AvatarFallback className="rounded-lg">
-                  {user.name
-                    ?.split(" ")
-                    .slice(0, 2)
-                    .map((data) => data.charAt(0).toUpperCase())
-                    .join("")}
-                </AvatarFallback>
+                <AvatarFallback className="rounded-lg">{fallbackAvatarName(user.name)}</AvatarFallback>
               </Avatar>
               <div className="grid flex-1 text-left text-sm leading-tight">
                 <span className="truncate font-medium">{user.name}</span>

@@ -47,7 +47,7 @@ export function AppSidebar() {
       return {
         id: family.id,
         title: family.identifier,
-        url: `/houses/${params?.id}/editor/${family.id}`,
+        url: `/dashboard/houses/${params?.id}/editor/${family.id}`,
       };
     });
 
