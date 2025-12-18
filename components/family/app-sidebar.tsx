@@ -35,7 +35,7 @@ export function AppSidebar() {
       setIsOpen(false);
     }
 
-    const response = await fetch(`/api/family/${params.id}`);
+    const response = await fetch(`/api/house/${params.id}/families`);
 
     const data = await response.json();
     if (!data.success) {
@@ -73,7 +73,7 @@ export function AppSidebar() {
         <h2 className="font-bold">Family Editor</h2>
       </SidebarHeader>
       <SidebarContent>
-        <Button className="mx-5 my-1 cursor-pointer" onClick={() => handleOpenSheet()}>
+        <Button className="mx-5 my-1 cursor-pointer font-bold" onClick={() => handleOpenSheet()}>
           <IconPlus />
           Add Family
         </Button>

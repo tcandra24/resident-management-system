@@ -28,7 +28,7 @@ export const AddNewForm = forwardRef<{ submit: () => void }, AddNewFormProps>(({
   });
 
   const onSubmit = async (value: z.infer<typeof formSchema>) => {
-    const response = await fetch(`/api/family/${params.id}`, {
+    const response = await fetch(`/api/house/${params.id}/family`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

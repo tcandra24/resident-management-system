@@ -7,6 +7,33 @@ type CreateFamily = {
   house_id: string;
 };
 
+export const getDetailFamily = async (id: string) => {
+  try {
+    const data = await prisma.family.findFirst({
+      where: {
+        id,
+      },
+      select: {
+        id: true,
+        identifier: true,
+      },
+    });
+
+    return {
+      success: true,
+      message: "Family fetched successfully",
+      data,
+    };
+  } catch (error) {
+    return {
+      success: false,
+      message: "Failed to fetch family",
+      error,
+      data: [],
+    };
+  }
+};
+
 export const getFamiliesByHouseId = async (id: string) => {
   try {
     const data = await prisma.family.findMany({

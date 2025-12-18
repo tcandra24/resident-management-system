@@ -1,5 +1,6 @@
 import { AppSidebar } from "@/components/family/app-sidebar";
-import { Separator } from "@/components/ui/separator";
+import { AppHeader } from "@/components/house/editor/header";
+// import { Separator } from "@/components/ui/separator";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 
 export default function Layout({
@@ -11,15 +12,7 @@ export default function Layout({
     <SidebarProvider>
       <AppSidebar />
       <SidebarInset>
-        <header className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12">
-          <div className="flex items-center gap-2 px-4 py-2 w-full border-b">
-            {/* <SidebarTrigger className="-ml-1" />
-            <Separator orientation="vertical" className="mr-2 data-[orientation=vertical]:h-4" /> */}
-            <p className="font-semibold">Header 1</p>
-            <Separator orientation="vertical" className="mr-2 data-[orientation=vertical]:h-4" />
-            <p className="font-semibold">Header 2</p>
-          </div>
-        </header>
+        <AppHeader />
         <div className="flex flex-1 flex-col gap-4 pt-0">{family}</div>
       </SidebarInset>
     </SidebarProvider>

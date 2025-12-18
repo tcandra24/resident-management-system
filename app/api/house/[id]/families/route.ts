@@ -1,10 +1,10 @@
 import { NextResponse, NextRequest } from "next/server";
-import { getDetailFamily } from "@/lib/actions/family.action";
+import { getFamiliesByHouseId } from "@/lib/actions/family.action";
 
 export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const { id } = await params;
-    const response = await getDetailFamily(id);
+    const response = await getFamiliesByHouseId(id);
 
     if (!response.success) {
       throw new Error(response.message);

@@ -1,11 +1,15 @@
 import { NextResponse, NextRequest } from "next/server";
-import { getDetailFamily } from "@/lib/actions/family.action";
+import { postFamily } from "@/lib/actions/family.action";
 
-export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+export async function POST(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const { id } = await params;
-    const response = await getDetailFamily(id);
+    const body = await request.json();
 
+    const response = await postFamily({
+      house_id: id,
+      ...body,
+    });
     if (!response.success) {
       throw new Error(response.message);
     }
