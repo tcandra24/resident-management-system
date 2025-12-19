@@ -1,7 +1,7 @@
 "use client";
 
-import * as React from "react";
-import { ColumnDef, ColumnFiltersState, SortingState, VisibilityState, flexRender, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, useReactTable } from "@tanstack/react-table";
+import { useCallback, useEffect, useState } from "react";
+import { CellContext, ColumnDef, ColumnFiltersState, SortingState, VisibilityState, flexRender, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, useReactTable } from "@tanstack/react-table";
 
 import { ArrowUpDown, MoreHorizontal } from "lucide-react";
 import { IconPlus } from "@tabler/icons-react";
@@ -38,11 +38,11 @@ export type Member = {
    EDITABLE CELLS
 ========================= */
 
-const EditableInputCell = ({ getValue, row, column, table }: any) => {
+const EditableInputCell = ({ getValue, row, column, table }: CellContext<Member, any>) => {
   const initialValue = getValue();
-  const [value, setValue] = React.useState(initialValue);
+  const [value, setValue] = useState(initialValue);
 
-  React.useEffect(() => {
+  useEffect(() => {
     setValue(initialValue);
   }, [initialValue]);
 
@@ -61,9 +61,9 @@ const EditableInputCell = ({ getValue, row, column, table }: any) => {
 
 const EditableDateCell = ({ getValue, row, column, table }: any) => {
   const initialValue = getValue();
-  const [value, setValue] = React.useState(initialValue);
+  const [value, setValue] = useState(initialValue);
 
-  React.useEffect(() => {
+  useEffect(() => {
     setValue(initialValue);
   }, [initialValue]);
 
@@ -137,12 +137,12 @@ export const columns: ColumnDef<Member>[] = [
    DATATABLE
 ========================= */
 
-export const DataTable = ({ data: initialData }: { data: Member[] }) => {
-  const [data, setData] = React.useState<Member[]>(initialData);
-  const [sorting, setSorting] = React.useState<SortingState>([]);
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
-  const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({});
-  const [rowSelection, setRowSelection] = React.useState({});
+export const DataTable = () => {
+  const [data, setData] = useState<Member[]>([]);
+  const [sorting, setSorting] = useState<SortingState>([]);
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
+  const [rowSelection, setRowSelection] = useState({});
 
   const params = useParams();
 
@@ -189,7 +189,7 @@ export const DataTable = ({ data: initialData }: { data: Member[] }) => {
       {
         id: `new-${Math.random().toString(36).slice(2, 9)}`,
         name: "",
-        birth_date: new Date().toISOString(),
+        birth_date: new Date().toISOString().slice(0, 10),
         job: "",
         family_id: params?.family_id as string,
       },
@@ -201,6 +201,9 @@ export const DataTable = ({ data: initialData }: { data: Member[] }) => {
 
     const response = await fetch(`/api/member`, {
       method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
       body: JSON.stringify(selectedRows),
     });
 
@@ -210,9 +213,25 @@ export const DataTable = ({ data: initialData }: { data: Member[] }) => {
       return;
     }
 
-    console.log(data);
-    // redirect(`/dashboard/houses/${params?.id}/editor/${params?.family_id}`);
+    table.resetRowSelection();
   };
+
+  const fetchData = useCallback(async () => {
+    const response = await fetch(`/api/house/${params?.id}/family/${params?.family_id}`);
+    const data = await response.json();
+
+    if (!data.success) {
+      console.log("Error : " + data.message);
+      return;
+    }
+
+    setData(data.data);
+  }, [params?.id, params?.family_id]);
+
+  useEffect(() => {
+    if (!params?.id || !params?.family_id) return;
+    fetchData();
+  }, [fetchData]);
 
   return (
     <div className="w-full">
