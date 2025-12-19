@@ -3,7 +3,7 @@
 import * as React from "react";
 import { ColumnDef, ColumnFiltersState, SortingState, VisibilityState, flexRender, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, useReactTable } from "@tanstack/react-table";
 
-import { ArrowUpDown, IdCard, MoreHorizontal } from "lucide-react";
+import { ArrowUpDown, MoreHorizontal } from "lucide-react";
 import { IconPlus } from "@tabler/icons-react";
 
 import { Button } from "@/components/ui/button";
@@ -11,8 +11,8 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Separator } from "@/components/ui/separator";
-import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { useRouter } from "next/navigation";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { useParams } from "next/navigation";
 
 declare module "@tanstack/react-table" {
   interface TableMeta<TData> {
@@ -137,14 +137,14 @@ export const columns: ColumnDef<Member>[] = [
    DATATABLE
 ========================= */
 
-export const DataTable = ({ data: initialData, familyId, houseId }: { data: Member[]; familyId: string; houseId: string }) => {
+export const DataTable = ({ data: initialData }: { data: Member[] }) => {
   const [data, setData] = React.useState<Member[]>(initialData);
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
 
-  const router = useRouter();
+  const params = useParams();
 
   const updateData = (rowIndex: number, columnId: string, value: any) => {
     setData((old) => old.map((row, index) => (index === rowIndex ? { ...row, [columnId]: value } : row)));
@@ -191,7 +191,7 @@ export const DataTable = ({ data: initialData, familyId, houseId }: { data: Memb
         name: "",
         birth_date: new Date().toISOString(),
         job: "",
-        family_id: familyId,
+        family_id: params?.family_id as string,
       },
     ]);
   };
@@ -205,10 +205,13 @@ export const DataTable = ({ data: initialData, familyId, houseId }: { data: Memb
     });
 
     const data = await response.json();
+    if (!data.success) {
+      console.log("Error : " + data.message);
+      return;
+    }
 
     console.log(data);
-
-    router.replace(`/dashboard/houses/${houseId}/editor/${familyId}`);
+    // redirect(`/dashboard/houses/${params?.id}/editor/${params?.family_id}`);
   };
 
   return (
