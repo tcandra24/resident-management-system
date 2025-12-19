@@ -1,4 +1,5 @@
-import { Item, ItemContent, ItemDescription, ItemMedia, ItemTitle, ItemActions } from "@/components/ui/item";
+import { AppBtnLgNew } from "@/components/family/app-btn-lg-new";
+import { Item, ItemContent, ItemMedia, ItemTitle, ItemActions } from "@/components/ui/item";
 import { getFamiliesByHouseId } from "@/lib/actions/family.action";
 
 import { IconUsersGroup } from "@tabler/icons-react";
@@ -12,19 +13,7 @@ export default async function House({ params }: { params: { id: string } }) {
   return (
     <div className="flex flex-col gap-4 py-4 md:gap-6 md:py-6 mx-32 my-8">
       <div className="w-full md:w-2/3 lg:w-1/2 mx-auto flex flex-col gap-5">
-        <Item variant="outline" size="sm" asChild>
-          <Link href="#">
-            <ItemMedia>
-              <div className="bg-primary p-2 rounded-full">
-                <IconUsersGroup className="size-7 text-white" />
-              </div>
-            </ItemMedia>
-            <ItemContent>
-              <ItemTitle className="font-bold">Create a family</ItemTitle>
-              <ItemDescription className="text-xs">Create and manage family data</ItemDescription>
-            </ItemContent>
-          </Link>
-        </Item>
+        <AppBtnLgNew />
 
         <div className="flex flex-col gap-2">
           <h1 className="font-bold text-sm">Recent Families</h1>

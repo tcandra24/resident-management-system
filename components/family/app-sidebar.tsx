@@ -12,6 +12,8 @@ import { useState, useRef, useEffect, useEffectEvent } from "react";
 import { AddNewForm } from "@/components/family/add-new-form";
 import { useRouter, useParams } from "next/navigation";
 
+import { useSheet } from "@/lib/contexts/SheetContext";
+
 type AppSideBarFamilyProps = {
   id: string;
   title: string;
@@ -19,7 +21,7 @@ type AppSideBarFamilyProps = {
 };
 
 export function AppSidebar() {
-  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const { isOpen, toggleSheet } = useSheet();
   const [families, setFamilies] = useState<AppSideBarFamilyProps[]>([]);
   const formRef = useRef<{ submit: () => void }>(null);
 
@@ -27,12 +29,12 @@ export function AppSidebar() {
   const router = useRouter();
 
   const handleOpenSheet = () => {
-    setIsOpen(true);
+    toggleSheet(true);
   };
 
   const fetchFamilies = useEffectEvent(async () => {
     if (isOpen) {
-      setIsOpen(false);
+      toggleSheet(false);
     }
 
     const response = await fetch(`/api/house/${params.id}/families`);
@@ -86,7 +88,7 @@ export function AppSidebar() {
         <NavMain items={families} activeFamilyId={(params?.family_id as string) ?? ""} />
       </SidebarContent>
       <SidebarRail />
-      <Sheet open={isOpen} onOpenChange={setIsOpen}>
+      <Sheet open={isOpen} onOpenChange={toggleSheet}>
         <SheetContent>
           <SheetHeader>
             <SheetTitle>Add family</SheetTitle>

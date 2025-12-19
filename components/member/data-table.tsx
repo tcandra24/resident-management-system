@@ -12,6 +12,7 @@ import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Separator } from "@/components/ui/separator";
 import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { useRouter } from "next/navigation";
 
 declare module "@tanstack/react-table" {
   interface TableMeta<TData> {
@@ -136,12 +137,14 @@ export const columns: ColumnDef<Member>[] = [
    DATATABLE
 ========================= */
 
-export const DataTable = ({ data: initialData, familyId }: { data: Member[]; familyId: string }) => {
+export const DataTable = ({ data: initialData, familyId, houseId }: { data: Member[]; familyId: string; houseId: string }) => {
   const [data, setData] = React.useState<Member[]>(initialData);
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
+
+  const router = useRouter();
 
   const updateData = (rowIndex: number, columnId: string, value: any) => {
     setData((old) => old.map((row, index) => (index === rowIndex ? { ...row, [columnId]: value } : row)));
@@ -204,6 +207,8 @@ export const DataTable = ({ data: initialData, familyId }: { data: Member[]; fam
     const data = await response.json();
 
     console.log(data);
+
+    router.replace(`/dashboard/houses/${houseId}/editor/${familyId}`);
   };
 
   return (
