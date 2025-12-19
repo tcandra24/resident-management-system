@@ -1,6 +1,5 @@
 import { AppSidebar } from "@/components/family/app-sidebar";
 import { AppHeader } from "@/components/house/editor/header";
-// import { Separator } from "@/components/ui/separator";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 
 export default function Layout({

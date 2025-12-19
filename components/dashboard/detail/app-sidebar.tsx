@@ -43,14 +43,13 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         url: `/dashboard/residents/${id}`,
         icon: IconBrandGoogleHome,
       },
-    ],
-    navSecondary: [
       {
-        title: "Settings",
-        url: "#",
+        title: "Resident Settings",
+        url: `/dashboard/residents/${id}/general`,
         icon: IconSettings,
       },
     ],
+    navSecondary: [],
   };
 
   const userData = {
