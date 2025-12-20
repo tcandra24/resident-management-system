@@ -17,11 +17,12 @@ import { useSheet } from "@/lib/contexts/SheetContext";
 type AppSideBarFamilyProps = {
   id: string;
   title: string;
+  house_id: string;
   url: string;
 };
 
 export function AppSidebar() {
-  const { isOpen, toggleSheet } = useSheet();
+  const { isOpen, toggleSheet, setPayloadData, payload } = useSheet();
   const [families, setFamilies] = useState<AppSideBarFamilyProps[]>([]);
   const formRef = useRef<{ submit: () => void }>(null);
 
@@ -29,6 +30,7 @@ export function AppSidebar() {
   const router = useRouter();
 
   const handleOpenSheet = () => {
+    setPayloadData(null);
     toggleSheet(true);
   };
 
@@ -45,10 +47,11 @@ export function AppSidebar() {
       return;
     }
 
-    const mappingData = data.data.map((family: { identifier: string; id: string }) => {
+    const mappingData = data.data.map((family: { identifier: string; id: string; house_id: string }) => {
       return {
         id: family.id,
         title: family.identifier,
+        house_id: family.house_id,
         url: `/dashboard/houses/${params?.id}/editor/${family.id}`,
       };
     });
@@ -91,8 +94,8 @@ export function AppSidebar() {
       <Sheet open={isOpen} onOpenChange={toggleSheet}>
         <SheetContent>
           <SheetHeader>
-            <SheetTitle>Add family</SheetTitle>
-            <SheetDescription>Make changes to your profile here. Click save when you&apos;re done.</SheetDescription>
+            <SheetTitle>{payload ? "Update Family" : "Add Family"}</SheetTitle>
+            <SheetDescription>Make changes to your family here. Click save when you&apos;re done.</SheetDescription>
           </SheetHeader>
           <ScrollArea className="h-[400px]">
             <AddNewForm ref={formRef} onSuccess={handleFormSuccess} />

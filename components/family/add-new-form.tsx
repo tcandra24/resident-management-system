@@ -9,9 +9,11 @@ import { z } from "zod";
 
 import { forwardRef, useImperativeHandle } from "react";
 import { useParams } from "next/navigation";
+import { useSheet } from "@/lib/contexts/SheetContext";
 
 type AddNewFormProps = {
   onSuccess?: (redirectUrl: string) => void;
+  identifier?: string;
 };
 
 const formSchema = z.object({
@@ -20,16 +22,26 @@ const formSchema = z.object({
 
 export const AddNewForm = forwardRef<{ submit: () => void }, AddNewFormProps>(({ onSuccess }, ref) => {
   const params = useParams();
+  const { payload } = useSheet();
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      identifier: "",
+      identifier: payload ? payload.identifier : "",
     },
   });
 
   const onSubmit = async (value: z.infer<typeof formSchema>) => {
-    const response = await fetch(`/api/house/${params.id}/family`, {
-      method: "POST",
+    let url = `/api/house/${params.id}/family`;
+    let method = "POST";
+
+    if (payload) {
+      url = payload.url;
+      method = "PUT";
+    }
+
+    const response = await fetch(url, {
+      method: method,
       headers: {
         "Content-Type": "application/json",
       },

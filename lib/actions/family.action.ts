@@ -2,7 +2,8 @@
 
 import prisma from "@/lib/prisma";
 
-type CreateFamily = {
+type FamilyProps = {
+  id: string;
   identifier: string;
   house_id: string;
 };
@@ -62,7 +63,7 @@ export const getFamiliesByHouseId = async (id: string) => {
   }
 };
 
-export const postFamily = async (formData: CreateFamily) => {
+export const postFamily = async (formData: FamilyProps) => {
   try {
     const { identifier, house_id } = formData;
 
@@ -76,6 +77,35 @@ export const postFamily = async (formData: CreateFamily) => {
     return {
       success: true,
       message: "Family inserted successfully",
+      data,
+    };
+  } catch (error) {
+    return {
+      success: false,
+      message: "Failed to insert family",
+      error,
+      data: null,
+    };
+  }
+};
+
+export const updateFamily = async (formData: FamilyProps) => {
+  try {
+    const { id, identifier, house_id } = formData;
+
+    const data = await prisma.family.update({
+      where: {
+        id,
+      },
+      data: {
+        identifier,
+        house_id,
+      },
+    });
+
+    return {
+      success: true,
+      message: "Family updated successfully",
       data,
     };
   } catch (error) {
