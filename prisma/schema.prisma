@@ -40,7 +40,7 @@ model House {
   address     String
   number      String
   resident_id String
-  resident    Resident @relation(fields: [resident_id], references: [id])
+  resident    Resident @relation(fields: [resident_id], references: [id], onDelete: Cascade)
   families    Family[]
   created_at  DateTime @default(now())
   updated_at  DateTime @updatedAt
@@ -52,7 +52,7 @@ model Family {
   id         String   @id @default(uuid())
   identifier String
   house_id   String
-  house      House    @relation(fields: [house_id], references: [id])
+  house      House    @relation(fields: [house_id], references: [id], onDelete: Cascade)
   members    Member[]
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
@@ -66,7 +66,7 @@ model Member {
   birth_date DateTime @db.Date
   job        String?
   family_id  String
-  family     Family   @relation(fields: [family_id], references: [id])
+  family     Family   @relation(fields: [family_id], references: [id], onDelete: Cascade)
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 

@@ -117,3 +117,26 @@ export const updateFamily = async (formData: FamilyProps) => {
     };
   }
 };
+
+export const destroyFamily = async (id: string) => {
+  try {
+    const data = await prisma.family.delete({
+      where: {
+        id,
+      },
+    });
+
+    return {
+      success: true,
+      message: "Families deleted successfully",
+      data,
+    };
+  } catch (error) {
+    return {
+      success: false,
+      message: "Failed to delete family",
+      error,
+      data: null,
+    };
+  }
+};
