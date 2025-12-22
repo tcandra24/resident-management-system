@@ -128,7 +128,7 @@ export const destroyFamily = async (id: string) => {
 
     return {
       success: true,
-      message: "Families deleted successfully",
+      message: "Family deleted successfully",
       data,
     };
   } catch (error) {

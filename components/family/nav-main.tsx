@@ -9,6 +9,11 @@ import Link from "next/link";
 import { useSheet } from "@/lib/contexts/SheetContext";
 import { useState } from "react";
 
+type DeleteFamilyProp = {
+  id: string;
+  house_id: string;
+};
+
 export function NavMain({
   items,
   activeFamilyId,
@@ -23,6 +28,7 @@ export function NavMain({
 }) {
   const { toggleSheet, setPayloadData } = useSheet();
   const [confirm, setConfirm] = useState<boolean>(false);
+  const [selectedId, setSelectedId] = useState<DeleteFamilyProp | null>(null);
 
   const handleOpenSheet = ({ id, house_id, identifier }: { id: string; house_id: string; identifier: string }) => {
     setPayloadData({
@@ -35,14 +41,23 @@ export function NavMain({
     toggleSheet(true);
   };
 
-  const onDelete = (id: string) => {
-    //
+  const onDelete = (id: string, house_id: string) => {
+    setSelectedId({ id, house_id });
+    setConfirm(true);
   };
 
-  const handleDelete = () => {
-    setConfirm(true);
+  const handleDelete = async () => {
+    if (!selectedId) return;
 
-    //
+    const response = await fetch(`/api/house/${selectedId.house_id}/family/${selectedId.id}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    const data = await response.json();
+
+    console.log(data);
   };
 
   return (
@@ -65,7 +80,7 @@ export function NavMain({
                 </div>
                 <DropdownMenuContent className="min-w-20 rounded-lg" side="bottom" align="start">
                   <DropdownMenuItem onClick={() => handleOpenSheet({ id: item.id, house_id: item.house_id, identifier: item.title })}>Edit</DropdownMenuItem>
-                  <DropdownMenuItem>Delete</DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => onDelete(item.id, item.house_id)}>Delete</DropdownMenuItem>
                 </DropdownMenuContent>
               </SidebarMenuItem>
             </DropdownMenu>
@@ -81,7 +96,9 @@ export function NavMain({
           <AlertDialogFooter>
             <AlertDialogCancel>Cancel</AlertDialogCancel>
             <AlertDialogAction asChild>
-              <Button variant={"destructive"}>Delete</Button>
+              <Button variant={"destructive"} onClick={() => handleDelete()}>
+                Delete
+              </Button>
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
