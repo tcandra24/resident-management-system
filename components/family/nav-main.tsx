@@ -17,6 +17,7 @@ type DeleteFamilyProp = {
 export function NavMain({
   items,
   activeFamilyId,
+  onSuccess,
 }: {
   items: {
     id: string;
@@ -25,6 +26,7 @@ export function NavMain({
     url: string;
   }[];
   activeFamilyId: string;
+  onSuccess: (method: string, redirectUrl?: string) => void;
 }) {
   const { toggleSheet, setPayloadData } = useSheet();
   const [confirm, setConfirm] = useState<boolean>(false);
@@ -57,7 +59,14 @@ export function NavMain({
     });
     const data = await response.json();
 
-    console.log(data);
+    if (!data.success) {
+      console.log("Error : " + data.message);
+      return;
+    }
+
+    setSelectedId(null);
+
+    onSuccess?.("DELETE", `/dashboard/houses/${selectedId.house_id}/editor`);
   };
 
   return (

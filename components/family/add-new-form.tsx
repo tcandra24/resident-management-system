@@ -12,7 +12,7 @@ import { useParams } from "next/navigation";
 import { useSheet } from "@/lib/contexts/SheetContext";
 
 type AddNewFormProps = {
-  onSuccess?: (redirectUrl: string) => void;
+  onSuccess?: (method: string, redirectUrl?: string) => void;
   identifier?: string;
 };
 
@@ -57,7 +57,11 @@ export const AddNewForm = forwardRef<{ submit: () => void }, AddNewFormProps>(({
       return;
     }
 
-    onSuccess?.(`/dashboard/houses/${params.id}/editor/${data.data.id}`);
+    if (method == "POST") {
+      onSuccess?.(method, `/dashboard/houses/${params.id}/editor/${data.data.id}`);
+    } else {
+      onSuccess?.(method);
+    }
   };
 
   useImperativeHandle(ref, () => ({

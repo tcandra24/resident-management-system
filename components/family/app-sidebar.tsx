@@ -34,7 +34,7 @@ export function AppSidebar() {
     toggleSheet(true);
   };
 
-  const fetchFamilies = useEffectEvent(async () => {
+  const fetchFamilies = async () => {
     if (isOpen) {
       toggleSheet(false);
     }
@@ -56,11 +56,21 @@ export function AppSidebar() {
       };
     });
 
-    setFamilies(mappingData);
+    return mappingData;
+  };
+
+  const eventFetchFamilies = useEffectEvent(async () => {
+    const families = await fetchFamilies();
+    setFamilies(families);
   });
 
-  const handleFormSuccess = (redirectUrl: string) => {
-    router.replace(redirectUrl);
+  const handleFormSuccess = async (method: string, redirectUrl: string = "") => {
+    if (method === "POST" || method === "DELETE") {
+      router.replace(redirectUrl);
+    } else {
+      const families = await fetchFamilies();
+      setFamilies(families);
+    }
   };
 
   const onSubmit = () => {
@@ -69,7 +79,7 @@ export function AppSidebar() {
 
   useEffect(() => {
     if (!params?.id) return;
-    fetchFamilies();
+    eventFetchFamilies();
   }, [params?.id, params?.family_id]);
 
   return (
@@ -88,7 +98,7 @@ export function AppSidebar() {
             <IconSearch />
           </InputGroupAddon>
         </InputGroup>
-        <NavMain items={families} activeFamilyId={(params?.family_id as string) ?? ""} />
+        <NavMain items={families} activeFamilyId={(params?.family_id as string) ?? ""} onSuccess={handleFormSuccess} />
       </SidebarContent>
       <SidebarRail />
       <Sheet open={isOpen} onOpenChange={toggleSheet}>
