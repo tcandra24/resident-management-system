@@ -7,6 +7,12 @@ type CreateHouse = {
   address: string;
 };
 
+type UpdateHouse = {
+  id: string;
+  number: string;
+  address: string;
+};
+
 export const getAllHouses = async (id: string) => {
   try {
     const data = await prisma.house.findMany({
@@ -74,6 +80,58 @@ export const postHouse = async (resident_id: string, formData: CreateHouse) => {
     return {
       success: false,
       message: "Failed to insert house",
+      error,
+      data: null,
+    };
+  }
+};
+
+export const updateHouse = async (formData: UpdateHouse) => {
+  try {
+    const { id, number, address } = formData;
+
+    const data = await prisma.house.update({
+      where: {
+        id,
+      },
+      data: {
+        number,
+        address,
+      },
+    });
+
+    return {
+      success: true,
+      message: "House updated successfully",
+      data,
+    };
+  } catch (error) {
+    return {
+      success: false,
+      message: "Failed to update house",
+      error,
+      data: null,
+    };
+  }
+};
+
+export const destroyHouse = async (id: string) => {
+  try {
+    const data = await prisma.house.delete({
+      where: {
+        id,
+      },
+    });
+
+    return {
+      success: true,
+      message: "House deleted successfully",
+      data,
+    };
+  } catch (error) {
+    return {
+      success: false,
+      message: "Failed to delete house",
       error,
       data: null,
     };

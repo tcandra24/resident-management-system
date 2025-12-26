@@ -111,7 +111,7 @@ export const updateFamily = async (formData: FamilyProps) => {
   } catch (error) {
     return {
       success: false,
-      message: "Failed to insert family",
+      message: "Failed to update family",
       error,
       data: null,
     };

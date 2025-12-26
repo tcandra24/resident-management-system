@@ -8,6 +8,12 @@ type CreateResident = {
   description: string;
 };
 
+type UpdateResident = {
+  id: string;
+  name: string;
+  description: string;
+};
+
 export const getAllResidents = async () => {
   try {
     const { userId: user } = await auth();
@@ -81,6 +87,58 @@ export const postResident = async (formData: CreateResident) => {
     return {
       success: false,
       message: "Failed to insert resident",
+      error,
+      data: null,
+    };
+  }
+};
+
+export const updateResident = async (formData: UpdateResident) => {
+  try {
+    const { id, name, description } = formData;
+
+    const data = await prisma.resident.update({
+      where: {
+        id,
+      },
+      data: {
+        name,
+        description,
+      },
+    });
+
+    return {
+      success: true,
+      message: "Resident updated successfully",
+      data,
+    };
+  } catch (error) {
+    return {
+      success: false,
+      message: "Failed to update resident",
+      error,
+      data: null,
+    };
+  }
+};
+
+export const destroyResident = async (id: string) => {
+  try {
+    const data = await prisma.resident.delete({
+      where: {
+        id,
+      },
+    });
+
+    return {
+      success: true,
+      message: "Resident deleted successfully",
+      data,
+    };
+  } catch (error) {
+    return {
+      success: false,
+      message: "Failed to delete resident",
       error,
       data: null,
     };
