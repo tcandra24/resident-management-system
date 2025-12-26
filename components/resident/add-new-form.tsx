@@ -53,7 +53,7 @@ export const AddNewForm = () => {
             <FormItem>
               <FormLabel className="font-bold">Name</FormLabel>
               <FormControl>
-                <Input placeholder="name of your resident" {...field} />
+                <Input placeholder="Name of your resident" {...field} />
               </FormControl>
               <FormDescription>This is your resident name.</FormDescription>
               <FormMessage />
