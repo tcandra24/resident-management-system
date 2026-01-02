@@ -1,5 +1,5 @@
 "use client";
-import { AlertDialog, AlertDialogAction, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 
@@ -29,26 +29,24 @@ export function AppDangerZone({ resident }: { resident: ResidentProps }) {
           </div>
         </AlertDescription>
       </Alert>
-      <AlertDialog open={isOpen} onOpenChange={setIsOpen}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Delete resident</AlertDialogTitle>
-            <AlertDialogDescription>
+      <Dialog open={isOpen} onOpenChange={setIsOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Delete resident</DialogTitle>
+            <DialogDescription>
               This action <span className="font-bold">cannot</span> be undone. This will permanently delete the <span className="font-bold">{resident.name}</span> resident and remove all of its houses.
-            </AlertDialogDescription>
-            <AlertDialogDescription className="my-4">
-              <AppInputVerifyDelete />
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogAction asChild>
-              <Button className="w-full font-bold" variant={"destructive"}>
-                I understand, delete this resident
-              </Button>
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
+            </DialogDescription>
+          </DialogHeader>
+          <div className="my-2">
+            <AppInputVerifyDelete />
+          </div>
+          <DialogFooter>
+            <Button className="w-full font-bold my-2" variant={"destructive"}>
+              I understand, delete this resident
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </>
   );
 }
