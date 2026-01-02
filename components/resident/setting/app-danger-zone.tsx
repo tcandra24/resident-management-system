@@ -4,7 +4,7 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 
 import { MessageSquareWarning } from "lucide-react";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { AppInputVerifyDelete } from "./app-input-verify-delete";
 
 type ResidentProps = {
@@ -14,6 +14,11 @@ type ResidentProps = {
 
 export function AppDangerZone({ resident }: { resident: ResidentProps }) {
   const [isOpen, setIsOpen] = useState(false);
+  const formRef = useRef<{ submit: () => void }>(null);
+
+  const onSubmit = () => {
+    formRef.current?.submit();
+  };
 
   return (
     <>
@@ -38,10 +43,10 @@ export function AppDangerZone({ resident }: { resident: ResidentProps }) {
             </DialogDescription>
           </DialogHeader>
           <div className="my-2">
-            <AppInputVerifyDelete />
+            <AppInputVerifyDelete ref={formRef} name={resident.name.toLowerCase().replaceAll(" ", "-")} />
           </div>
           <DialogFooter>
-            <Button className="w-full font-bold my-2" variant={"destructive"}>
+            <Button className="w-full font-bold my-2" variant={"destructive"} onClick={() => onSubmit()}>
               I understand, delete this resident
             </Button>
           </DialogFooter>
