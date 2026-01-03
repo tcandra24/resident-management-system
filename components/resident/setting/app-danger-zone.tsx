@@ -43,7 +43,7 @@ export function AppDangerZone({ resident }: { resident: ResidentProps }) {
             </DialogDescription>
           </DialogHeader>
           <div className="my-2">
-            <AppInputVerifyDelete ref={formRef} name={resident.name.toLowerCase().replaceAll(" ", "-")} />
+            <AppInputVerifyDelete ref={formRef} id={resident.id} name={resident.name.toLowerCase().replaceAll(" ", "-")} />
           </div>
           <DialogFooter>
             <Button className="w-full font-bold my-2" variant={"destructive"} onClick={() => onSubmit()}>

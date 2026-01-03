@@ -8,11 +8,16 @@ import { z } from "zod";
 import { Input } from "@/components/ui/input";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 
+import { useRouter } from "next/navigation";
+
 type VerifyDeleteProps = {
+  id: string;
   name: string;
 };
 
-export const AppInputVerifyDelete = forwardRef<{ submit: () => void }, VerifyDeleteProps>(({ name }, ref) => {
+export const AppInputVerifyDelete = forwardRef<{ submit: () => void }, VerifyDeleteProps>(({ id, name }, ref) => {
+  const router = useRouter();
+
   const formSchema = z.object({
     verify: z.string().refine((val) => val === name, {
       message: `You must type ${name} to confirm`,
@@ -26,8 +31,21 @@ export const AppInputVerifyDelete = forwardRef<{ submit: () => void }, VerifyDel
     },
   });
 
-  const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    console.log(values);
+  const onSubmit = async () => {
+    const response = await fetch(`/api/resident/${id}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    const data = await response.json();
+
+    if (!data.success) {
+      console.log("Error : " + data.message);
+      return;
+    }
+
+    router.replace(`/dashboard/residents`);
   };
 
   useImperativeHandle(ref, () => ({
