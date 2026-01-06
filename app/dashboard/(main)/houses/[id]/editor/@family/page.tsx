@@ -1,5 +1,5 @@
 import { AppBtnLgNew } from "@/components/family/app-btn-lg-new";
-import { Item, ItemContent, ItemMedia, ItemTitle, ItemActions } from "@/components/ui/item";
+import { Item, ItemContent, ItemMedia, ItemTitle } from "@/components/ui/item";
 import { getFamiliesByHouseId } from "@/lib/actions/family.action";
 
 import { IconUsersGroup } from "@tabler/icons-react";
@@ -30,7 +30,6 @@ export default async function House({ params }: { params: { id: string } }) {
                     <ItemContent>
                       <ItemTitle>{family.identifier}</ItemTitle>
                     </ItemContent>
-                    <ItemActions>action</ItemActions>
                   </Link>
                 </Item>
               ))}
