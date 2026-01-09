@@ -1,37 +1,46 @@
-import * as React from "react";
+"use client";
 
 import { Sidebar, SidebarContent, SidebarHeader, SidebarRail } from "@/components/ui/sidebar";
 
-import { SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarSeparator } from "@/components/ui/sidebar";
-
-// This is sample data.
-const data = {
-  calendars: [
-    {
-      name: "My Calendars",
-      items: ["Personal", "Work", "Family"],
-    },
-    {
-      name: "Favorites",
-      items: ["Holidays", "Birthdays"],
-    },
-    {
-      name: "Other",
-      items: ["Travel", "Reminders", "Deadlines"],
-    },
-  ],
-};
+import { SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarSeparator } from "@/components/ui/sidebar";
+import { cn } from "@/lib/utils";
+import Link from "next/link";
+import { useParams, usePathname } from "next/navigation";
 
 export function AppSidebar() {
+  const { id } = useParams();
+  const segments = usePathname();
+  const lastSegment = segments.split("/").filter(Boolean).at(-1);
+
+  const menu = [
+    {
+      title: "General",
+      name: "general",
+      url: `/dashboard/houses/${id}/settings/general`,
+    },
+    {
+      title: "General2",
+      name: "general2",
+      url: `/dashboard/houses/${id}/settings/general2`,
+    },
+  ];
+
   return (
     <>
       <Sidebar collapsible="none">
-        <SidebarHeader className="border-sidebar-border h-16 border-b">Header</SidebarHeader>
+        <SidebarHeader className="border-sidebar-border border-b text-2xl font-bold">
+          <h1 className="m-3">Settings</h1>
+        </SidebarHeader>
         <SidebarContent>
-          <SidebarMenu className="group/label text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground w-full text-sm">
-            <SidebarMenuItem>
-              <SidebarMenuButton>123124sdgsd</SidebarMenuButton>
-            </SidebarMenuItem>
+          <SidebarMenu>
+            <h1 className="w-full mx-3 mt-2 text-xl font-bold">House Setting</h1>
+            {menu.map((element) => (
+              <SidebarMenuItem key={element.name} className={cn(lastSegment === element.name && "bg-sidebar-accent text-sidebar-accent-foreground", "text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground text-sm mx-3")}>
+                <Link href={element.url}>
+                  <SidebarMenuButton>{element.title}</SidebarMenuButton>
+                </Link>
+              </SidebarMenuItem>
+            ))}
           </SidebarMenu>
           <SidebarSeparator className="mx-0" />
         </SidebarContent>
