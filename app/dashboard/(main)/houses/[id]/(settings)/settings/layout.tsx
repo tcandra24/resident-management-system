@@ -11,7 +11,7 @@ export default function Layout({
     <SidebarProvider>
       <AppSidebar />
       <SidebarInset>
-        <div className="flex flex-1 flex-col gap-4 pt-0">{settings}</div>
+        <div className="w-full flex flex-col">{settings}</div>
       </SidebarInset>
     </SidebarProvider>
   );

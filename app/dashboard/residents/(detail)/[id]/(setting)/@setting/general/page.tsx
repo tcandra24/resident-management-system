@@ -1,5 +1,6 @@
 import { AppDangerZone } from "@/components/resident/setting/app-danger-zone";
 import { SettingAppForm } from "@/components/resident/setting/app-main-form";
+
 import { getDetailResident } from "@/lib/actions/resident.action";
 
 export default async function General({ params }: { params: { id: string } }) {

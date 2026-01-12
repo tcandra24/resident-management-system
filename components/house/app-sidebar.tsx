@@ -18,11 +18,6 @@ export function AppSidebar() {
       name: "general",
       url: `/dashboard/houses/${id}/settings/general`,
     },
-    {
-      title: "General2",
-      name: "general2",
-      url: `/dashboard/houses/${id}/settings/general2`,
-    },
   ];
 
   return (
