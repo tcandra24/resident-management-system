@@ -7,6 +7,8 @@ import { InputGroup, InputGroupAddon, InputGroupInput } from "@/components/ui/in
 import { Avatar } from "@/components/ui/avatar";
 import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyTitle } from "@/components/ui/empty";
 
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+
 import Link from "next/link";
 
 import { useEffectEvent, useEffect, useState } from "react";
@@ -72,6 +74,11 @@ export function AppList({ residents }: { residents: ResidentProps[] }) {
               </Card>
             </Link>
           ))
+        ) : searchParam ? (
+          <Alert variant="default">
+            <AlertTitle>No results found</AlertTitle>
+            <AlertDescription>You search for &quot;{searchParam}&quot; did not return any results</AlertDescription>
+          </Alert>
         ) : (
           <Empty className="border border-double w-full">
             <EmptyHeader>
