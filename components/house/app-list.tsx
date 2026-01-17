@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useMemo, useState } from "react";
-import { IconPlus, IconSearch, IconBox } from "@tabler/icons-react";
+import { IconPlus, IconSearch, IconHome2 } from "@tabler/icons-react";
 
 import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -11,54 +11,52 @@ import { Avatar } from "@/components/ui/avatar";
 import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyTitle } from "@/components/ui/empty";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
-type ResidentProps = {
+type HouseProps = {
   id: string;
-  name: string;
-  description: string;
+  number: string;
+  address: string;
 };
 
-export function AppList({ residents }: { residents: ResidentProps[] }) {
+export function AppList({ houses, id }: { houses: HouseProps[]; id: string }) {
   const [searchParam, setSearchParam] = useState("");
 
-  const filteredResidents = useMemo(() => {
-    if (!searchParam) return residents;
+  const filteredHouses = useMemo(() => {
+    if (!searchParam) return houses;
 
-    return residents.filter((resident) => resident.name.toLowerCase().includes(searchParam.toLowerCase()));
-  }, [searchParam, residents]);
+    return houses.filter((house) => house.number.toLowerCase().includes(searchParam.toLowerCase()));
+  }, [searchParam, houses]);
 
   return (
     <>
       <div className="w-full flex justify-between">
         <div className="w-1/3">
           <InputGroup>
-            <InputGroupInput placeholder="Search for resident..." value={searchParam} onChange={(e) => setSearchParam(e.target.value)} />
+            <InputGroupInput placeholder="Search for house..." value={searchParam} onChange={(e) => setSearchParam(e.target.value)} />
             <InputGroupAddon>
               <IconSearch />
             </InputGroupAddon>
           </InputGroup>
         </div>
-
-        <Button asChild className="font-bold">
-          <Link href="/dashboard/residents/new">
+        <Link href={`/dashboard/houses/new/${id}`}>
+          <Button className="font-bold">
             <IconPlus />
-            Add Residents
-          </Link>
-        </Button>
+            Add House
+          </Button>
+        </Link>
       </div>
-
       <div className="flex gap-5">
-        {filteredResidents.length > 0 ? (
-          filteredResidents.map((resident) => (
-            <Link key={resident.id} href={`/dashboard/residents/${resident.id}`} className="w-full max-w-md group hover:cursor-pointer">
-              <Card>
+        {filteredHouses.length > 0 ? (
+          filteredHouses.map((house: HouseProps) => (
+            <Link key={house.id} href={`/dashboard/houses/${house.id}`} className="w-full max-w-md group hover:cursor-pointer">
+              <Card className="h-40">
                 <CardHeader>
                   <div className="flex gap-4">
                     <Avatar>
-                      <IconBox />
+                      <IconHome2 />
                     </Avatar>
                     <div className="flex flex-col space-y-1">
-                      <CardTitle className="group-hover:text-gray-500">{resident.name}</CardTitle>
-                      <CardDescription className="text-gray-400 font-bold group-hover:text-gray-300">{resident.description}</CardDescription>
+                      <CardTitle className="group-hover:text-gray-500">{house.number}</CardTitle>
+                      <CardDescription className="text-gray-400 font-bold group-hover:text-gray-300">{house.address}</CardDescription>
                     </div>
                   </div>
                 </CardHeader>
@@ -73,16 +71,16 @@ export function AppList({ residents }: { residents: ResidentProps[] }) {
         ) : (
           <Empty className="border border-double w-full">
             <EmptyHeader>
-              <EmptyTitle className="font-bold">Resident is Empty</EmptyTitle>
-              <EmptyDescription>You can add resident to add houses & family</EmptyDescription>
+              <EmptyTitle className="font-bold">House is Empty</EmptyTitle>
+              <EmptyDescription>You can add house to add family</EmptyDescription>
             </EmptyHeader>
             <EmptyContent>
-              <Button asChild variant="outline" size="sm">
-                <Link href="/dashboard/residents/new">
+              <Link href={`/dashboard/houses/new/${id}`}>
+                <Button variant="outline" size="sm">
                   <IconPlus />
-                  Add Residents
-                </Link>
-              </Button>
+                  Add House
+                </Button>
+              </Link>
             </EmptyContent>
           </Empty>
         )}

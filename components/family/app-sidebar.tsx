@@ -1,9 +1,8 @@
 "use client";
-import { IconPlus, IconSearch } from "@tabler/icons-react";
+import { IconPlus } from "@tabler/icons-react";
 
-import { Sheet, SheetClose, SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+import { Sheet, SheetClose, SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { Sidebar, SidebarContent, SidebarHeader, SidebarRail } from "@/components/ui/sidebar";
-import { InputGroup, InputGroupAddon, InputGroupInput } from "@/components/ui/input-group";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { NavMain } from "@/components/family/nav-main";
 import { Button } from "@/components/ui/button";
@@ -83,21 +82,15 @@ export function AppSidebar() {
   }, [params?.id, params?.family_id]);
 
   return (
-    <Sidebar collapsible="none">
-      <SidebarHeader>
+    <Sidebar collapsible="none" className="mx-3">
+      <SidebarHeader className="px-0">
         <h2 className="font-bold">Family Editor</h2>
       </SidebarHeader>
       <SidebarContent>
-        <Button className="mx-5 my-1 cursor-pointer font-bold" onClick={() => handleOpenSheet()}>
+        <Button className="my-1 cursor-pointer font-bold" onClick={() => handleOpenSheet()}>
           <IconPlus />
           Add Family
         </Button>
-        <InputGroup className="mx-5 my-1 w-fit">
-          <InputGroupInput placeholder="Search for family..." />
-          <InputGroupAddon>
-            <IconSearch />
-          </InputGroupAddon>
-        </InputGroup>
         <NavMain items={families} activeFamilyId={(params?.family_id as string) ?? ""} onSuccess={handleFormSuccess} />
       </SidebarContent>
       <SidebarRail />

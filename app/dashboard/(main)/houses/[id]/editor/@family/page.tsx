@@ -1,5 +1,6 @@
 import { AppBtnLgNew } from "@/components/family/app-btn-lg-new";
 import { Item, ItemContent, ItemMedia, ItemTitle } from "@/components/ui/item";
+import { Empty, EmptyMedia, EmptyDescription, EmptyHeader, EmptyTitle } from "@/components/ui/empty";
 import { getFamiliesByHouseId } from "@/lib/actions/family.action";
 
 import { IconUsersGroup } from "@tabler/icons-react";
@@ -8,7 +9,7 @@ import Link from "next/link";
 export default async function House({ params }: { params: { id: string } }) {
   const { id } = await params;
 
-  const { data } = await getFamiliesByHouseId(id);
+  const { data: families } = await getFamiliesByHouseId(id);
 
   return (
     <div className="flex flex-col gap-4 py-4 md:gap-6 md:py-6 mx-32 my-8">
@@ -18,8 +19,8 @@ export default async function House({ params }: { params: { id: string } }) {
         <div className="flex flex-col gap-2">
           <h1 className="font-bold text-sm">Recent Families</h1>
           <div className="flex flex-col gap-1">
-            {data &&
-              data.map((family) => (
+            {families.length > 0 ? (
+              families.map((family) => (
                 <Item className="p-0 py-2" key={family.id} asChild>
                   <Link href={`/dashboard/houses/${id}/editor/${family.id}`}>
                     <ItemMedia>
@@ -32,7 +33,18 @@ export default async function House({ params }: { params: { id: string } }) {
                     </ItemContent>
                   </Link>
                 </Item>
-              ))}
+              ))
+            ) : (
+              <Empty className="border border-double w-full">
+                <EmptyMedia variant="icon">
+                  <IconUsersGroup className="size-5 text-black/50" />
+                </EmptyMedia>
+                <EmptyHeader>
+                  <EmptyTitle className="font-bold text-sm">No recent items yet</EmptyTitle>
+                  <EmptyDescription className="text-sm">Items will appear here as you browse through your family</EmptyDescription>
+                </EmptyHeader>
+              </Empty>
+            )}
           </div>
         </div>
       </div>
