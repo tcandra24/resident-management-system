@@ -1,14 +1,8 @@
 import { DataTable } from "@/components/member/data-table";
-// import { getMembersByFamilyId } from "@/lib/actions/member.action";
-//{ params }: { params: { id: string; family_id: string } }
-export default async function House() {
-  // const { family_id } = await params;
 
-  // const { data: members } = await getMembersByFamilyId(family_id);
-
-  return (
-    <>
-      <DataTable />
-    </>
-  );
+// DataTable fetches its own member data client-side based on the
+// `id` / `family_id` route params (see components/member/data-table.tsx),
+// so no server-side data fetching is needed here.
+export default function FamilyMembers() {
+  return <DataTable />;
 }

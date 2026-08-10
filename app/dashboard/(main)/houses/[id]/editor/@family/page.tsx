@@ -12,7 +12,7 @@ export default async function House({ params }: { params: { id: string } }) {
   const { data: families } = await getFamiliesByHouseId(id);
 
   return (
-    <div className="flex flex-col gap-4 py-4 md:gap-6 md:py-6 mx-32 my-8">
+    <div className="flex flex-col gap-4 px-4 py-4 md:gap-6 md:py-6 md:px-16 lg:px-32 my-8">
       <div className="w-full md:w-2/3 lg:w-1/2 mx-auto flex flex-col gap-5">
         <AppBtnLgNew />
 
