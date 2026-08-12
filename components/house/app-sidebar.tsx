@@ -23,14 +23,14 @@ export function AppSidebar() {
   return (
     <>
       <Sidebar collapsible="none">
-        <SidebarHeader className="border-sidebar-border border-b text-2xl font-bold">
-          <h1 className="m-3">Settings</h1>
+        <SidebarHeader className="border-sidebar-border border-b text-xl font-semibold">
+          <h1 className="m-1">Settings</h1>
         </SidebarHeader>
         <SidebarContent>
           <SidebarMenu>
-            <h1 className="w-full mx-3 mt-2 text-xl font-bold">House Setting</h1>
+            <h1 className="w-full mx-3 my-2 text-sm font-mono-heading uppercase">Configuration</h1>
             {menu.map((element) => (
-              <SidebarMenuItem key={element.name} className={cn(lastSegment === element.name && "bg-sidebar-accent text-sidebar-accent-foreground", "text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground text-sm mx-3")}>
+              <SidebarMenuItem key={element.name} className={cn(lastSegment === element.name && "bg-sidebar-accent text-sidebar-accent-foreground", "hover:bg-sidebar-accent hover:text-sidebar-accent-foreground text-sm mx-3 rounded-md text-white")}>
                 <Link href={element.url}>
                   <SidebarMenuButton>{element.title}</SidebarMenuButton>
                 </Link>

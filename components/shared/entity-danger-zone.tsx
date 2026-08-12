@@ -61,10 +61,10 @@ export function EntityDangerZone({ entityLabel, warningTitle, warningBody = "Mak
 
   return (
     <>
-      <Alert variant="destructive" className="bg-[#d2150326]">
+      <Alert variant="destructive" className="bg-[#d2150326] dark:text-white/50">
         <MessageSquareWarning />
         <AlertTitle className="font-bold">{warningTitle}</AlertTitle>
-        <AlertDescription className="flex flex-col gap-3">
+        <AlertDescription className="flex flex-col gap-3 dark:text-white/50">
           <p className="m-0">{warningBody}</p>
           <div className="w-full">
             <Button variant="destructive" className="font-bold cursor-pointer" onClick={() => setIsOpen(true)}>

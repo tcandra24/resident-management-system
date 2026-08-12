@@ -1,11 +1,16 @@
 import type { Metadata } from "next";
-import { Outfit } from "next/font/google";
+import { Outfit, Geist_Mono } from "next/font/google";
 import { ClerkProvider } from "@clerk/nextjs";
 import "./globals.css";
 
 const fontSans = Outfit({
   subsets: ["latin"],
   variable: "--font-sans",
+});
+
+const geistMono = Geist_Mono({
+  variable: "--font-mono-heading",
+  subsets: ["latin"],
 });
 
 export const metadata: Metadata = {
@@ -21,7 +26,7 @@ export default function RootLayout({
   return (
     <ClerkProvider>
       <html lang="en" className="dark">
-        <body className={`${fontSans.variable} antialiased overflow-auto`}>
+        <body className={`${fontSans.variable} ${geistMono.variable} antialiased overflow-auto`}>
           <main className="relative min-h-screen">{children}</main>
         </body>
       </html>
