@@ -26,11 +26,11 @@ export const getMembersByFamilyId = async (id: string) => {
     });
 
     const mappingData = data.map((member) => {
-      const birth_date = new Date(member.birth_date);
+      const birth_date = new Date(member.birth_date).toISOString().slice(0, 10);
 
       return {
         ...member,
-        birth_date: `${birth_date.getFullYear()}-${birth_date.getMonth()}-${birth_date.getDate()}`,
+        birth_date: birth_date,
       };
     });
 
@@ -67,7 +67,7 @@ export const postMember = async (formData: CreateMember[]) => {
           job: item.job,
           family_id: item.family_id,
         },
-      })
+      }),
     );
     const data = await prisma.$transaction(queries);
 

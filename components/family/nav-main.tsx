@@ -1,10 +1,10 @@
 "use client";
 import { IconSearch } from "@tabler/icons-react";
-import { MoreVertical } from "lucide-react";
+import { MoreVertical, PencilIcon, TrashIcon } from "lucide-react";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
-import { SidebarGroup, SidebarGroupLabel, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { SidebarGroup, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuSeparator } from "@/components/ui/dropdown-menu";
 import { InputGroup, InputGroupAddon, InputGroupInput } from "@/components/ui/input-group";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import Link from "next/link";
@@ -87,27 +87,62 @@ export function NavMain({
         </InputGroupAddon>
       </InputGroup>
       <SidebarGroup className="p-0">
-        <SidebarGroupLabel>Families</SidebarGroupLabel>
         <SidebarMenu>
           {filteredFamilies.length > 0 ? (
-            filteredFamilies.map((item) => (
-              <DropdownMenu key={item.title}>
-                <SidebarMenuItem>
-                  <div className="flex justify-between items-center">
-                    <SidebarMenuButton isActive={!!(activeFamilyId && item.id === activeFamilyId)} tooltip={item.title}>
-                      <Link href={item.url}>{item.title}</Link>
-                      <DropdownMenuTrigger asChild>
-                        <MoreVertical className="ml-auto size-4" />
-                      </DropdownMenuTrigger>
-                    </SidebarMenuButton>
-                  </div>
-                  <DropdownMenuContent className="min-w-20 rounded-lg" side="bottom" align="start">
-                    <DropdownMenuItem onClick={() => handleOpenSheet({ id: item.id, house_id: item.house_id, identifier: item.title })}>Edit</DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => onDelete(item.id, item.house_id)}>Delete</DropdownMenuItem>
-                  </DropdownMenuContent>
-                </SidebarMenuItem>
-              </DropdownMenu>
-            ))
+            filteredFamilies.map((item) => {
+              const isActive = !!(activeFamilyId && item.id === activeFamilyId);
+              return (
+                <DropdownMenu key={item.title}>
+                  <SidebarMenuItem>
+                    <div className="flex items-center">
+                      <SidebarMenuButton asChild isActive={isActive} tooltip={item.title} className="flex justify-between">
+                        <Link className="block" href={item.url}>
+                          <span>{item.title}</span>
+                          {isActive && (
+                            <DropdownMenuTrigger asChild>
+                              <Button
+                                variant="ghost"
+                                size="icon"
+                                className="ml-1 size-6 shrink-0"
+                                onClick={(e) => {
+                                  e.preventDefault();
+                                  e.stopPropagation();
+                                }}
+                              >
+                                <MoreVertical className="size-4" />
+                                <span className="sr-only">Open menu</span>
+                              </Button>
+                            </DropdownMenuTrigger>
+                          )}
+                        </Link>
+                      </SidebarMenuButton>
+
+                      <DropdownMenuContent className="min-w-20 rounded-lg" side="bottom" align="start">
+                        <DropdownMenuItem
+                          onClick={() =>
+                            handleOpenSheet({
+                              id: item.id,
+                              house_id: item.house_id,
+                              identifier: item.title,
+                            })
+                          }
+                        >
+                          <PencilIcon />
+                          Edit
+                        </DropdownMenuItem>
+
+                        <DropdownMenuSeparator />
+
+                        <DropdownMenuItem onClick={() => onDelete(item.id, item.house_id)}>
+                          <TrashIcon />
+                          Delete
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </div>
+                  </SidebarMenuItem>
+                </DropdownMenu>
+              );
+            })
           ) : (
             <Alert className="text-center">
               {searchParam ? (

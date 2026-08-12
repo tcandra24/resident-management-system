@@ -45,6 +45,7 @@ export const getFamiliesByHouseId = async (id: string) => {
         id: true,
         identifier: true,
         house_id: true,
+        created_at: true,
       },
     });
 

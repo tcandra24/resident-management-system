@@ -3,7 +3,7 @@
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Field, FieldDescription, FieldGroup, FieldLabel, FieldSeparator } from "@/components/ui/field";
+import { Field, FieldDescription, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 
 import { Spinner } from "@/components/ui/spinner";
@@ -120,7 +120,7 @@ export function RegisterForm({ className, ...props }: React.ComponentProps<"div"
             </Clerk.Loading>
           </SignUp.Root>
           <div className="bg-muted relative hidden md:block">
-            <Image src="/banner.png" width={450} height={530} alt="Image" className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale" />
+            <Image src="/banner.png" width={450} height={530} alt="Image" className="absolute inset-0 h-full w-full object-cover" loading="eager" />
           </div>
         </CardContent>
       </Card>

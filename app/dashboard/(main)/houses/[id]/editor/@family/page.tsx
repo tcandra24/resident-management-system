@@ -1,5 +1,7 @@
+import { formatDistanceToNow } from "date-fns";
+
 import { AppBtnLgNew } from "@/components/family/app-btn-lg-new";
-import { Item, ItemContent, ItemMedia, ItemTitle } from "@/components/ui/item";
+import { Item, ItemContent, ItemMedia, ItemTitle, ItemDescription } from "@/components/ui/item";
 import { Empty, EmptyMedia, EmptyDescription, EmptyHeader, EmptyTitle } from "@/components/ui/empty";
 import { getFamiliesByHouseId } from "@/lib/actions/family.action";
 
@@ -25,11 +27,12 @@ export default async function House({ params }: { params: { id: string } }) {
                   <Link href={`/dashboard/houses/${id}/editor/${family.id}`}>
                     <ItemMedia>
                       <div className="p-2 rounded-xl border">
-                        <IconUsersGroup className="size-5 text-black/50" />
+                        <IconUsersGroup className="size-6 text-black/50 dark:text-white/50" />
                       </div>
                     </ItemMedia>
                     <ItemContent>
-                      <ItemTitle>{family.identifier}</ItemTitle>
+                      <ItemTitle className="flex flex-1 gap-5 items-center">{family.identifier}</ItemTitle>
+                      <ItemDescription>{formatDistanceToNow(new Date(family.created_at), { addSuffix: true })}</ItemDescription>
                     </ItemContent>
                   </Link>
                 </Item>
@@ -37,7 +40,7 @@ export default async function House({ params }: { params: { id: string } }) {
             ) : (
               <Empty className="border border-double w-full">
                 <EmptyMedia variant="icon">
-                  <IconUsersGroup className="size-5 text-black/50" />
+                  <IconUsersGroup className="size-5 text-black/50 dark:text-white/50" />
                 </EmptyMedia>
                 <EmptyHeader>
                   <EmptyTitle className="font-bold text-sm">No recent items yet</EmptyTitle>

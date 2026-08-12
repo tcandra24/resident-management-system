@@ -50,7 +50,7 @@ export function AppBreadcrumb({ segments }: { segments: string[] }) {
             <Fragment key={href}>
               {index > 0 && <BreadcrumbSeparator className="hidden md:block" />}
               <BreadcrumbItem>
-                <BreadcrumbPage>{formatLabel(segment)}</BreadcrumbPage>
+                <BreadcrumbPage className="font-semibold">{formatLabel(segment)}</BreadcrumbPage>
               </BreadcrumbItem>
             </Fragment>
           );

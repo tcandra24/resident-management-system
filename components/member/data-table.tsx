@@ -76,7 +76,7 @@ const EditableDateCell = ({ getValue, row, column, table }: any) => {
         row.toggleSelected(true);
       }}
       onBlur={() => table.options.meta?.updateData(row.index, column.id, value)}
-      className="border-0 shadow-none"
+      className="border-0 shadow-none scheme-light dark:scheme-dark"
     />
   );
 };

@@ -82,11 +82,11 @@ export function AppSidebar() {
   }, [params?.id, params?.family_id]);
 
   return (
-    <Sidebar collapsible="none" className="mx-3">
-      <SidebarHeader className="px-0">
+    <Sidebar collapsible="none" className="mx-2">
+      <SidebarHeader className="px-2">
         <h2 className="font-bold">Family Editor</h2>
       </SidebarHeader>
-      <SidebarContent>
+      <SidebarContent className="px-2">
         <Button className="my-1 cursor-pointer font-bold" onClick={() => handleOpenSheet()}>
           <IconPlus />
           Add Family
@@ -100,7 +100,7 @@ export function AppSidebar() {
             <SheetTitle>{payload ? "Update Family" : "Add Family"}</SheetTitle>
             <SheetDescription>Make changes to your family here. Click save when you&apos;re done.</SheetDescription>
           </SheetHeader>
-          <ScrollArea className="h-[400px]">
+          <ScrollArea className="h-100">
             <AddNewForm ref={formRef} onSuccess={handleFormSuccess} />
           </ScrollArea>
           <SheetFooter>
