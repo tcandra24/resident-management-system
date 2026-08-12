@@ -1,5 +1,8 @@
 "use client";
 import { useUser } from "@clerk/nextjs";
+import Link from "next/link";
+
+import { useCallback, useEffect, useState } from "react";
 
 import { IconDashboard, IconListDetails, IconSettings } from "@tabler/icons-react";
 
@@ -10,18 +13,27 @@ import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, Sid
 import { DataSwitcher } from "@/components/data-switcher";
 import { Separator } from "@/components/ui/separator";
 import { useParams } from "next/navigation";
+
 import Image from "next/image";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const [residents, setResidents] = useState([]);
   const { user: getUser } = useUser();
   const { id } = useParams();
 
+  const fetchResidents = useCallback(async () => {
+    const response = await fetch(`/api/resident`);
+    const data = await response.json();
+
+    if (!data.success) {
+      console.log("Error : " + data.message);
+      return;
+    }
+
+    setResidents(data.data);
+  }, []);
+
   const data = {
-    user: {
-      name: "shadcn",
-      email: "m@example.com",
-      avatar: "/avatars/shadcn.jpg",
-    },
     teams: [
       {
         name: "Acme Inc",
@@ -63,21 +75,25 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     avatar: getUser?.imageUrl ?? "",
   };
 
+  useEffect(() => {
+    fetchResidents();
+  }, [fetchResidents]);
+
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton asChild className="data-[slot=sidebar-menu-button]:!p-1.5">
-              <a href="#">
+              <Link href="/dashboard/residents">
                 <Image src={"/logo.png"} alt="Logo" width={30} height={30} />
                 <span className="text-base font-semibold">{process.env.NEXT_PUBLIC_APP_NAME!}</span>
-              </a>
+              </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
         <Separator />
-        <DataSwitcher teams={data.teams} />
+        <DataSwitcher residents={residents} />
       </SidebarHeader>
       <SidebarContent>
         <NavMain items={data.navMain} />
