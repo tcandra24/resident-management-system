@@ -34,7 +34,7 @@ export function LoginForm({ className, ...props }: React.ComponentProps<"div">) 
                     <FieldGroup>
                       <div className="flex flex-col items-center gap-2 text-center">
                         <h1 className="text-2xl font-bold">Welcome back</h1>
-                        <p className="text-muted-foreground text-balance">Login to your Acme Inc account</p>
+                        <p className="text-muted-foreground text-balance">Sign in to your Resident Management account</p>
                       </div>
                       <Clerk.Field name="identifier" asChild>
                         <Field>
@@ -67,7 +67,7 @@ export function LoginForm({ className, ...props }: React.ComponentProps<"div">) 
                       <Field>
                         <SignIn.Action submit asChild>
                           <Button disabled={isGlobalLoading}>
-                            <Clerk.Loading>{(isLoading) => (isLoading ? <Spinner /> : "Login")}</Clerk.Loading>
+                            <Clerk.Loading>{(isLoading) => (isLoading ? <Spinner /> : "Sign in")}</Clerk.Loading>
                           </Button>
                         </SignIn.Action>
                       </Field>
@@ -92,7 +92,7 @@ export function LoginForm({ className, ...props }: React.ComponentProps<"div">) 
                                 fill="currentColor"
                               />
                             </svg>
-                            <span className="sr-only">Login with Github</span>
+                            <span className="sr-only">Sign up with Github</span>
                           </Button>
                         </Clerk.Connection>
                       </Field>

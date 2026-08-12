@@ -28,7 +28,7 @@ export function RegisterForm({ className, ...props }: React.ComponentProps<"div"
                     <FieldGroup>
                       <div className="flex flex-col items-center gap-2 text-center">
                         <h1 className="text-2xl font-bold">Welcome</h1>
-                        <p className="text-muted-foreground text-balance">Register to your Acme Inc account</p>
+                        <p className="text-muted-foreground text-balance">Sign up to your Resident Management account</p>
                       </div>
                       <Clerk.Field name="emailAddress" asChild>
                         <Field>
@@ -80,7 +80,7 @@ export function RegisterForm({ className, ...props }: React.ComponentProps<"div"
                       <Field>
                         <SignUp.Action submit asChild>
                           <Button disabled={isGlobalLoading}>
-                            <Clerk.Loading>{(isLoading) => (isLoading ? <Spinner /> : "Register")}</Clerk.Loading>
+                            <Clerk.Loading>{(isLoading) => (isLoading ? <Spinner /> : "Sign up")}</Clerk.Loading>
                           </Button>
                         </SignUp.Action>
                       </Field>
