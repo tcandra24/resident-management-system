@@ -8,8 +8,10 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel,
 import { SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar } from "@/components/ui/sidebar";
 
 export function DataSwitcher({
+  detailResident,
   residents,
 }: {
+  detailResident: { id: string; name: string; description: string } | undefined;
   residents: {
     id: string;
     name: string;
@@ -17,11 +19,11 @@ export function DataSwitcher({
   }[];
 }) {
   const { isMobile } = useSidebar();
-  const [activeResident, setActiveResident] = React.useState(residents[0]);
+  // const [activeResident, setActiveResident] = React.useState(residents?.[0]);
 
-  if (!activeResident) {
-    return null;
-  }
+  // if (!activeResident) {
+  //   return null;
+  // }
 
   return (
     <SidebarMenu>
@@ -33,8 +35,8 @@ export function DataSwitcher({
                 <GalleryVerticalEnd className="size-4" />
               </div>
               <div className="grid flex-1 text-left text-sm leading-tight">
-                <span className="truncate font-medium">{activeResident.name}</span>
-                <span className="truncate text-xs">{activeResident.description}</span>
+                <span className="truncate font-medium">{detailResident?.name}</span>
+                <span className="truncate text-xs">{detailResident?.description}</span>
               </div>
               <ChevronsUpDown className="ml-auto" />
             </SidebarMenuButton>
@@ -42,9 +44,9 @@ export function DataSwitcher({
           <DropdownMenuContent className="w-(--radix-dropdown-menu-trigger-width) min-w-56 rounded-lg" align="start" side={isMobile ? "bottom" : "right"} sideOffset={4}>
             <DropdownMenuLabel className="text-muted-foreground text-xs">Residents</DropdownMenuLabel>
             {residents.map((resident) => (
-              <DropdownMenuItem key={resident.id} onClick={() => setActiveResident(resident)} className="gap-2 p-2">
-                {resident.name}
-              </DropdownMenuItem>
+              <Link key={resident.id} href={`/dashboard/residents/${resident.id}`}>
+                <DropdownMenuItem className="gap-2 p-2">{resident.name}</DropdownMenuItem>
+              </Link>
             ))}
             <DropdownMenuSeparator />
             <Link href="/dashboard/residents/new">

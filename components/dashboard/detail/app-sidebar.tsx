@@ -13,30 +13,11 @@ import { Separator } from "@/components/ui/separator";
 import { useParams } from "next/navigation";
 import Image from "next/image";
 
-export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+export function AppSidebar({ residents, ...props }: { residents: { id: string; name: string; description: string }[] } & React.ComponentProps<typeof Sidebar>) {
   const { user: getUser } = useUser();
   const { id } = useParams();
 
   const data = {
-    user: {
-      name: "shadcn",
-      email: "m@example.com",
-      avatar: "/avatars/shadcn.jpg",
-    },
-    teams: [
-      {
-        name: "Acme Inc",
-        plan: "Enterprise",
-      },
-      {
-        name: "Acme Corp.",
-        plan: "Startup",
-      },
-      {
-        name: "Evil Corp.",
-        plan: "Free",
-      },
-    ],
     navMain: [
       {
         title: "Houses",
@@ -58,6 +39,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     avatar: getUser?.imageUrl ?? "",
   };
 
+  const detailResident = residents.find((resident) => resident.id === id);
+
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
@@ -72,7 +55,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           </SidebarMenuItem>
         </SidebarMenu>
         <Separator />
-        <DataSwitcher teams={data.teams} />
+        <DataSwitcher residents={residents} detailResident={detailResident} />
       </SidebarHeader>
       <SidebarContent>
         <NavMain items={data.navMain} />

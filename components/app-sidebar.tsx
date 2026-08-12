@@ -2,8 +2,6 @@
 import { useUser } from "@clerk/nextjs";
 import Link from "next/link";
 
-import { useCallback, useEffect, useState } from "react";
-
 import { IconDashboard, IconListDetails, IconSettings } from "@tabler/icons-react";
 
 import { NavMain } from "@/components/nav-main";
@@ -16,38 +14,11 @@ import { useParams } from "next/navigation";
 
 import Image from "next/image";
 
-export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-  const [residents, setResidents] = useState([]);
+export function AppSidebar({ residents, ...props }: { residents: { id: string; name: string; description: string; houses: { id: string }[] }[] } & React.ComponentProps<typeof Sidebar>) {
   const { user: getUser } = useUser();
   const { id } = useParams();
 
-  const fetchResidents = useCallback(async () => {
-    const response = await fetch(`/api/resident`);
-    const data = await response.json();
-
-    if (!data.success) {
-      console.log("Error : " + data.message);
-      return;
-    }
-
-    setResidents(data.data);
-  }, []);
-
   const data = {
-    teams: [
-      {
-        name: "Acme Inc",
-        plan: "Enterprise",
-      },
-      {
-        name: "Acme Corp.",
-        plan: "Startup",
-      },
-      {
-        name: "Evil Corp.",
-        plan: "Free",
-      },
-    ],
     navMain: [
       {
         title: "House Overview",
@@ -75,9 +46,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     avatar: getUser?.imageUrl ?? "",
   };
 
-  useEffect(() => {
-    fetchResidents();
-  }, [fetchResidents]);
+  const detailResident = residents.find((resident) => resident.houses.some((house) => house.id === id));
 
   return (
     <Sidebar collapsible="icon" {...props}>
@@ -93,7 +62,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           </SidebarMenuItem>
         </SidebarMenu>
         <Separator />
-        <DataSwitcher residents={residents} />
+        <DataSwitcher residents={residents} detailResident={detailResident} />
       </SidebarHeader>
       <SidebarContent>
         <NavMain items={data.navMain} />

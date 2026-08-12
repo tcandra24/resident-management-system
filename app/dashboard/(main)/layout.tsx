@@ -2,11 +2,15 @@ import { AppSidebar } from "@/components/app-sidebar";
 import { SiteHeader } from "@/components/site-header";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 
-export default function Layout({
+import { getAllResidents } from "@/lib/actions/resident.action";
+
+export default async function Layout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const { data: residents } = await getAllResidents();
+
   return (
     <SidebarProvider
       defaultOpen={false}
@@ -17,7 +21,7 @@ export default function Layout({
         } as React.CSSProperties
       }
     >
-      <AppSidebar variant="inset" />
+      <AppSidebar variant="inset" residents={residents} />
       <SidebarInset>
         <SiteHeader />
         <div className="flex flex-1 flex-col">

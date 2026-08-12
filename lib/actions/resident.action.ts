@@ -22,6 +22,16 @@ export const getAllResidents = async () => {
       where: {
         user_id: user!,
       },
+      select: {
+        id: true,
+        name: true,
+        description: true,
+        houses: {
+          select: {
+            id: true,
+          },
+        },
+      },
     });
 
     return {
