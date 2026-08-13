@@ -24,14 +24,14 @@ export function AppBreadcrumb({ segments }: { segments: string[] }) {
         const response = await fetch(`/api/resident/${id}`);
         const data = await response.json();
 
-        updatedPaths[1] = data.data.name;
+        updatedPaths[1] = data?.data?.name ?? "";
       }
 
       if (page === "houses") {
         const response = await fetch(`/api/house/${id}`);
         const data = await response.json();
 
-        updatedPaths[1] = data.data.number;
+        updatedPaths[1] = data?.data?.number ?? "";
       }
 
       setPaths(updatedPaths);

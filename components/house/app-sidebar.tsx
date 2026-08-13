@@ -23,10 +23,10 @@ export function AppSidebar() {
   return (
     <>
       <Sidebar collapsible="none">
-        <SidebarHeader className="border-sidebar-border border-b text-xl">
+        <SidebarHeader className="border-sidebar-border border-b text-sm">
           <h1 className="m-1">Settings</h1>
         </SidebarHeader>
-        <SidebarContent>
+        <SidebarContent className="overflow-x-hidden">
           <SidebarMenu>
             <h1 className="w-full mx-3 my-2 text-sm font-mono-heading uppercase">Configuration</h1>
             {menu.map((element) => (

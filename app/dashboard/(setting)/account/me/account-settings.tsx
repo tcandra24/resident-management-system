@@ -1,12 +1,15 @@
 "use client";
 import { useUser, useClerk } from "@clerk/nextjs";
 import { z } from "zod";
-// import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 import { EntityForm } from "@/components/shared/entity-form";
 import { EntityDangerZone } from "@/components/shared/entity-danger-zone";
 
+import { IconMailOpened } from "@tabler/icons-react";
+
 import { Skeleton } from "@/components/ui/skeleton";
+import { Button } from "@/components/ui/button";
 
 const accountSchema = z.object({
   firstName: z.string().min(1).max(100),
@@ -14,7 +17,6 @@ const accountSchema = z.object({
 });
 
 export function AccountSettings() {
-  // const router = useRouter();
   const { user, isLoaded } = useUser();
   const { signOut } = useClerk();
 
@@ -70,6 +72,24 @@ export function AccountSettings() {
           });
         }}
       />
+
+      <h3 className="text-lg text-foreground">Account identities</h3>
+      <div className="w-full py-4 px-8 border rounded-lg flex overflow-hidden justify-between">
+        <div className="flex gap-x-4 items-center">
+          <IconMailOpened className="size-7" />
+          <div>
+            <p className="m-0 text-sm">Email</p>
+            <p className="m-0 text-sm text-foreground">sdsdf</p>
+          </div>
+        </div>
+        <div className="flex items-center">
+          <Link href="/dashboard/reset-password">
+            <Button variant="outline" className="text-sm cursor-pointer">
+              Change Password
+            </Button>
+          </Link>
+        </div>
+      </div>
 
       <h3 className="text-lg text-foreground">Delete Account</h3>
       <EntityDangerZone

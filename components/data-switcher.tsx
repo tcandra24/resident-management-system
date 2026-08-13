@@ -1,8 +1,8 @@
 "use client";
 
-import * as React from "react";
 import { ChevronsUpDown, Plus, GalleryVerticalEnd } from "lucide-react";
 import Link from "next/link";
+import { capitalizeWords } from "@titocandradev/neatcore";
 
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar } from "@/components/ui/sidebar";
@@ -19,11 +19,6 @@ export function DataSwitcher({
   }[];
 }) {
   const { isMobile } = useSidebar();
-  // const [activeResident, setActiveResident] = React.useState(residents?.[0]);
-
-  // if (!activeResident) {
-  //   return null;
-  // }
 
   return (
     <SidebarMenu>
@@ -45,7 +40,7 @@ export function DataSwitcher({
             <DropdownMenuLabel className="text-muted-foreground text-xs">Residents</DropdownMenuLabel>
             {residents.map((resident) => (
               <Link key={resident.id} href={`/dashboard/residents/${resident.id}`}>
-                <DropdownMenuItem className="gap-2 p-2">{resident.name}</DropdownMenuItem>
+                <DropdownMenuItem className="gap-2 p-2">{capitalizeWords(resident.name)}</DropdownMenuItem>
               </Link>
             ))}
             <DropdownMenuSeparator />
