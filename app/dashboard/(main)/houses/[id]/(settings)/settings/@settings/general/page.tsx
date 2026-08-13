@@ -10,7 +10,7 @@ export default async function General({ params }: { params: { id: string } }) {
       <div className="flex flex-col space-y-8 mx-auto">
         <div className="flex flex-col space-y-2">
           <h1 className="text-xl text-foreground font-bold">House Setting</h1>
-          <p className="text-foreground m-0">Configure setting of your house here</p>
+          <p className="m-0">Configure setting of your house here</p>
         </div>
 
         <HouseSettings house={{ id, resident_id: house.data?.resident_id ?? "", number: house.data?.number ?? "", address: house.data?.address ?? "" }} />

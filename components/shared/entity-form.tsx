@@ -24,7 +24,7 @@ type EntityFormProps<T extends FieldValues> = {
   fields: EntityFieldConfig<T>[];
   defaultValues: DefaultValues<T>;
   onSubmit: (values: T) => Promise<void>;
-  cancelHref: string;
+  cancelHref?: string;
   submitLabel?: string;
   /** "card" is used for standalone "create new" pages, "settings" for the
    *  bordered row layout used on entity settings pages. */
@@ -77,9 +77,11 @@ export function EntityForm<T extends FieldValues>({ schema, fields, defaultValue
           ))}
 
           <div className={cn("flex flex-col-reverse sm:flex-row justify-between gap-3", isSettings ? "sm:justify-end px-3 pb-3 sm:px-3" : "sm:justify-between")}>
-            <Button type="button" variant="secondary" className="w-full sm:w-auto cursor-pointer" onClick={() => router.push(cancelHref)}>
-              Cancel
-            </Button>
+            {cancelHref && (
+              <Button type="button" variant="secondary" className="w-full sm:w-auto cursor-pointer" onClick={() => router.push(cancelHref)}>
+                Cancel
+              </Button>
+            )}
             <Button type="submit" className="w-full sm:w-auto cursor-pointer">
               {submitLabel}
             </Button>

@@ -1,6 +1,7 @@
 "use client";
 
 import { useUser } from "@clerk/nextjs";
+import Link from "next/link";
 
 import { IconBrandGoogleHome, IconSettings } from "@tabler/icons-react";
 
@@ -47,10 +48,10 @@ export function AppSidebar({ residents, ...props }: { residents: { id: string; n
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton asChild className="data-[slot=sidebar-menu-button]:!p-1.5">
-              <a href="#">
+              <Link href="/dashboard/residents">
                 <Image src={"/logo.png"} alt="Logo" width={30} height={30} />
                 <span className="text-base font-semibold">{process.env.NEXT_PUBLIC_APP_NAME!}</span>
-              </a>
+              </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>

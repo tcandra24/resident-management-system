@@ -11,6 +11,8 @@ import { Avatar } from "@/components/ui/avatar";
 import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyTitle } from "@/components/ui/empty";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
+import { capitalizeWords } from "@titocandradev/neatcore";
+
 export type EntityListItem = {
   id: string;
   title: string;
@@ -71,7 +73,7 @@ export function EntityList({ items, icon, searchPlaceholder, addHref, addLabel, 
                     <div className="flex gap-4">
                       <Avatar>{icon}</Avatar>
                       <div className="flex flex-col space-y-1 min-w-0">
-                        <CardTitle className="group-hover:text-gray-500 truncate">{item.title}</CardTitle>
+                        <CardTitle className="group-hover:text-gray-500 truncate">{capitalizeWords(item.title)}</CardTitle>
                         <CardDescription className="text-gray-400 font-bold group-hover:text-gray-300 truncate">{item.subtitle}</CardDescription>
                       </div>
                     </div>

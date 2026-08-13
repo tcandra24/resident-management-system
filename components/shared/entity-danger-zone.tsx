@@ -22,6 +22,7 @@ type EntityDangerZoneProps = {
   /** Human-readable name shown in the confirmation copy (can differ in casing from confirmValue). */
   confirmDisplayValue: string;
   redirectAfterDelete: string;
+  onDeleted?: () => Promise<void> | void;
 };
 
 /**
@@ -29,7 +30,16 @@ type EntityDangerZoneProps = {
  * dialog that requires typing the entity's name before the destructive
  * action is enabled. Used by residents, houses, and similar entities.
  */
-export function EntityDangerZone({ entityLabel, warningTitle, warningBody = "Make sure you have made a backup of your data if you want to keep it.", deleteEndpoint, confirmValue, confirmDisplayValue, redirectAfterDelete }: EntityDangerZoneProps) {
+export function EntityDangerZone({
+  entityLabel,
+  warningTitle,
+  warningBody = "Make sure you have made a backup of your data if you want to keep it.",
+  deleteEndpoint,
+  confirmValue,
+  confirmDisplayValue,
+  redirectAfterDelete,
+  onDeleted,
+}: EntityDangerZoneProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [verifyText, setVerifyText] = useState("");
   const [isDeleting, setIsDeleting] = useState(false);
@@ -52,6 +62,7 @@ export function EntityDangerZone({ entityLabel, warningTitle, warningBody = "Mak
 
       if (!data.success) throw new Error(data.message);
 
+      await onDeleted?.();
       router.replace(redirectAfterDelete);
     } catch (error) {
       console.error(error);
