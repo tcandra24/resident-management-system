@@ -1,13 +1,17 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
+
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 
 const changePasswordSchema = z.object({
   currentPassword: z.string().min(1).max(100),
@@ -15,6 +19,8 @@ const changePasswordSchema = z.object({
 });
 
 export default function ResetPassword() {
+  const router = useRouter();
+
   const form = useForm<z.infer<typeof changePasswordSchema>>({
     resolver: zodResolver(changePasswordSchema),
     defaultValues: {
@@ -23,7 +29,25 @@ export default function ResetPassword() {
     },
   });
 
-  const handleSubmit = async (values: z.infer<typeof changePasswordSchema>) => {};
+  const handleSubmit = async (values: z.infer<typeof changePasswordSchema>) => {
+    console.log(values);
+    try {
+      const response = await fetch("/api/account/change-password", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(values),
+      });
+      const data = await response.json();
+
+      if (!data.success) throw new Error(data.message);
+
+      router.replace("/dashboard/residents");
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <>
@@ -35,10 +59,40 @@ export default function ResetPassword() {
         </div>
       </div>
       <div className="w-full md:max-w-4xl">
-        <div className="max-w-sm mx-auto">
+        <div className="max-w-sm mx-auto space-y-14">
+          <h3 className="text-4xl text-foreground">Change your password</h3>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-8">
-              {/*  */}
+              <FormField
+                control={form.control}
+                name="currentPassword"
+                render={({ field }) => (
+                  <FormItem className="flex flex-col text-left gap-3">
+                    <FormLabel>Current Password</FormLabel>
+                    <FormControl>
+                      <Input placeholder="••••••••" type="password" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="newPassword"
+                render={({ field }) => (
+                  <FormItem className="flex flex-col text-left gap-3">
+                    <FormLabel>New Password</FormLabel>
+                    <FormControl>
+                      <Input placeholder="••••••••" type="password" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <Button type="submit" className="w-full cursor-pointer">
+                Send new password
+              </Button>
             </form>
           </Form>
         </div>
