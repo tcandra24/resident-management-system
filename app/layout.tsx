@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Toaster } from "@/components/ui/sonner";
 import { Outfit, Geist_Mono } from "next/font/google";
 import { ClerkProvider } from "@clerk/nextjs";
 import "./globals.css";
@@ -28,6 +29,7 @@ export default function RootLayout({
       <html lang="en" className="dark">
         <body className={`${fontSans.variable} ${geistMono.variable} antialiased overflow-auto`}>
           <main className="relative min-h-screen">{children}</main>
+          <Toaster />
         </body>
       </html>
     </ClerkProvider>
