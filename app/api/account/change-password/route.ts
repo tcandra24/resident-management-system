@@ -1,7 +1,8 @@
 import { NextResponse, NextRequest } from "next/server";
 import { auth, clerkClient } from "@clerk/nextjs/server";
+import { isClerkAPIResponseError } from "@clerk/nextjs/errors";
 
-export async function PUT(request: NextRequest) {
+export async function POST(request: NextRequest) {
   try {
     const { userId, sessionId } = await auth();
 
@@ -52,7 +53,18 @@ export async function PUT(request: NextRequest) {
       success: true,
       message: "Password changed successfully",
     });
-  } catch (error: Error | unknown) {
+  } catch (error: unknown) {
+    if (isClerkAPIResponseError(error)) {
+      console.error("Clerk error changing password:", error.errors);
+      return NextResponse.json(
+        {
+          success: false,
+          message: error.errors[0]?.longMessage ?? error.errors[0]?.message ?? "Failed to update password",
+        },
+        { status: error.status ?? 422 },
+      );
+    }
+    console.error(error);
     return NextResponse.json({
       success: false,
       message: error instanceof Error ? error.message : "An unexpected error occurred",

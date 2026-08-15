@@ -1,9 +1,9 @@
 "use client";
-
+import { useClerk } from "@clerk/nextjs";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import Image from "next/image";
 
+import { toast } from "sonner";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
@@ -14,12 +14,12 @@ import * as z from "zod";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 
 const changePasswordSchema = z.object({
-  currentPassword: z.string().min(1).max(100),
-  newPassword: z.string().min(1).max(100),
+  currentPassword: z.string().min(8).max(100),
+  newPassword: z.string().min(8).max(100),
 });
 
 export default function ResetPassword() {
-  const router = useRouter();
+  const { signOut } = useClerk();
 
   const form = useForm<z.infer<typeof changePasswordSchema>>({
     resolver: zodResolver(changePasswordSchema),
@@ -30,10 +30,9 @@ export default function ResetPassword() {
   });
 
   const handleSubmit = async (values: z.infer<typeof changePasswordSchema>) => {
-    console.log(values);
     try {
       const response = await fetch("/api/account/change-password", {
-        method: "PUT",
+        method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
@@ -43,9 +42,11 @@ export default function ResetPassword() {
 
       if (!data.success) throw new Error(data.message);
 
-      router.replace("/dashboard/residents");
-    } catch (error) {
-      console.error(error);
+      signOut({ redirectUrl: "/sign-in" });
+    } catch (error: Error | unknown) {
+      toast.error("Failed to save password", {
+        description: (error as Error).message,
+      });
     }
   };
 
