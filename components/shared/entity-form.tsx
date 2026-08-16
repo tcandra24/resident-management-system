@@ -57,7 +57,7 @@ export function EntityForm<T extends FieldValues>({ schema, fields, defaultValue
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-8">
-        <div className={cn(isSettings && "w-full border rounded-lg flex flex-col overflow-hidden")}>
+        <div className={cn(isSettings ? "w-full border rounded-lg flex flex-col overflow-hidden" : "flex flex-col gap-4")}>
           {fields.map((fieldConfig, index) => (
             <FormField
               key={fieldConfig.name}
@@ -75,7 +75,6 @@ export function EntityForm<T extends FieldValues>({ schema, fields, defaultValue
               )}
             />
           ))}
-
           <div className={cn("flex flex-col-reverse sm:flex-row justify-between gap-3", isSettings ? "sm:justify-end px-3 pb-3 sm:px-3" : "sm:justify-between")}>
             {cancelHref && (
               <Button type="button" variant="secondary" className="w-full sm:w-auto cursor-pointer" onClick={() => router.push(cancelHref)}>

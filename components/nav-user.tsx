@@ -1,6 +1,6 @@
 "use client";
 
-import { IconCreditCard, IconDotsVertical, IconLogout, IconUserCircle } from "@tabler/icons-react";
+import { IconDotsVertical, IconLogout, IconUserCircle } from "@tabler/icons-react";
 
 import Link from "next/link";
 
@@ -68,10 +68,10 @@ export function NavUser({
                   Account
                 </DropdownMenuItem>
               </Link>
-              <DropdownMenuItem>
+              {/* <DropdownMenuItem>
                 <IconCreditCard />
                 Billing
-              </DropdownMenuItem>
+              </DropdownMenuItem> */}
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuItem onClick={() => signOut({ redirectUrl: "/sign-in" })}>
