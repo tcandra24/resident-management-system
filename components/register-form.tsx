@@ -7,9 +7,11 @@ import { Field, FieldDescription, FieldGroup, FieldLabel } from "@/components/ui
 import { Input } from "@/components/ui/input";
 
 import { Spinner } from "@/components/ui/spinner";
+import { AuthFormSkeleton } from "@/components/auth-form-skeleton";
 
 import Image from "next/image";
 
+import { ClerkLoading, ClerkLoaded } from "@clerk/nextjs";
 import * as Clerk from "@clerk/elements/common";
 import * as SignUp from "@clerk/elements/sign-up";
 import Link from "next/link";
@@ -17,6 +19,10 @@ import Link from "next/link";
 export function RegisterForm({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
+      <ClerkLoading>
+        <AuthFormSkeleton extraFields={2} />
+      </ClerkLoading>
+      <ClerkLoaded>
       <Card className="overflow-hidden p-0">
         <CardContent className="grid p-0 md:grid-cols-2">
           <SignUp.Root>
@@ -124,6 +130,7 @@ export function RegisterForm({ className, ...props }: React.ComponentProps<"div"
           </div>
         </CardContent>
       </Card>
+      </ClerkLoaded>
     </div>
   );
 }
