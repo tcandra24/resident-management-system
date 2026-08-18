@@ -2,14 +2,17 @@
 
 import { Breadcrumb, BreadcrumbItem, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from "@/components/ui/breadcrumb";
 import { Fragment, useEffect, useState } from "react";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const formatLabel = (segment: string) => segment.replace(/-/g, " ").replace(/\b\w/g, (l) => l.toUpperCase());
 
 export function AppBreadcrumb({ segments }: { segments: string[] }) {
   const [paths, setPaths] = useState<string[]>(segments);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     async function resolveBreadcrumbs() {
+      setIsLoading(true);
       const updatedPaths = [...segments];
 
       const page = updatedPaths[0];
@@ -35,6 +38,7 @@ export function AppBreadcrumb({ segments }: { segments: string[] }) {
       }
 
       setPaths(updatedPaths);
+      setIsLoading(false);
     }
 
     resolveBreadcrumbs();
@@ -50,7 +54,7 @@ export function AppBreadcrumb({ segments }: { segments: string[] }) {
             <Fragment key={href}>
               {index > 0 && <BreadcrumbSeparator className="hidden md:block" />}
               <BreadcrumbItem>
-                <BreadcrumbPage className="font-semibold">{formatLabel(segment)}</BreadcrumbPage>
+                <BreadcrumbPage className="font-semibold">{isLoading ? <Skeleton className="h-4 w-24" /> : formatLabel(segment)}</BreadcrumbPage>
               </BreadcrumbItem>
             </Fragment>
           );
