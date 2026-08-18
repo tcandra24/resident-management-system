@@ -1,4 +1,5 @@
 "use client";
+import { useState } from "react";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, type DefaultValues, type FieldValues, type Path } from "react-hook-form";
@@ -6,6 +7,7 @@ import type { ZodType } from "zod";
 import { useRouter } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
+import { Spinner } from "@/components/ui/spinner";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
@@ -38,6 +40,7 @@ type EntityFormProps<T extends FieldValues> = {
  * duplicating a near-identical form per entity.
  */
 export function EntityForm<T extends FieldValues>({ schema, fields, defaultValues, onSubmit, cancelHref, submitLabel = "Submit", variant = "card" }: EntityFormProps<T>) {
+  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const isSettings = variant === "settings";
 
@@ -48,9 +51,14 @@ export function EntityForm<T extends FieldValues>({ schema, fields, defaultValue
 
   const handleSubmit = async (values: T) => {
     try {
+      setIsLoading(true);
       await onSubmit(values);
     } catch (error) {
       console.error(error);
+    } finally {
+      if (isSettings) {
+        setIsLoading(false);
+      }
     }
   };
 
@@ -81,7 +89,8 @@ export function EntityForm<T extends FieldValues>({ schema, fields, defaultValue
                 Cancel
               </Button>
             )}
-            <Button type="submit" className="w-full sm:w-auto cursor-pointer">
+            <Button type="submit" className="w-full sm:w-auto cursor-pointer" disabled={isLoading}>
+              {isLoading && <Spinner />}
               {submitLabel}
             </Button>
           </div>
